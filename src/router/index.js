@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/login/:user',
+    path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue'),
     props: true
@@ -79,6 +79,21 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(route => route.meta.requiresAuth)
+  const isLoggedIn = window.localStorage.getItem('token_sekolah')
+
+  if (requiresAuth && !isLoggedIn){ 
+    next({ name: 'login' })
+  }else if(isLoggedIn && to.name === 'login') {
+    next({ name: 'home' })
+  }else if (requiresAuth && isLoggedIn) {
+    next()
+  }else {
+    next()
+  }
 })
 
 export default router

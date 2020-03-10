@@ -3,6 +3,7 @@
 		<v-overlay class="bg-login" :style="`background-image: url(${require('@/assets/bg.jpeg')})`">
 			<v-card light color="white" width="500px">
 				<v-card-title>
+					<img src="@/assets/logo.png" alt="logo" class="mx-auto" />
 					<Header/>
 				</v-card-title>
 				<v-divider></v-divider>

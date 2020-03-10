@@ -38,4 +38,12 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// add extra plugin codecogs
 	config.extraPlugins = 'eqneditor'
+
+	// remove plugin image
+	config.removePlugins = 'image'
+
+	// setting cloud services
+	// config.extraPlugins = 'easyimage'
+	// config.cloudServices_uploadUrl = 'https://cbt-api.smart-edu.id/api/upload/question/image'
+	// config.cloudServices_tokenUrl = window.localStorage.getItem('token_admin')
 };

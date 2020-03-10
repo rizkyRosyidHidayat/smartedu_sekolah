@@ -50,7 +50,7 @@
 		VSpacer
 	} from 'vuetify/lib'
 	import TambahSiswa from '@/components/Siswa/TambahSiswa'
-	import UploadSiswa from '@/components/Siswa/UploadSiswa'
+	import UploadSiswa from '@/components/Siswa/UploadSiswa.vue'
 	import KosongkanSiswa from '@/components/Siswa/KosongkanSiswa'
 	import EditSiswa from '@/components/Siswa/EditSiswa'
 	import HapusSiswa from '@/components/Siswa/HapusSiswa'

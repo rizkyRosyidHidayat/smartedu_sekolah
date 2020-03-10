@@ -75,6 +75,11 @@
     VIcon
   } from 'vuetify/lib'
   import XLSX from 'xlsx'
+  import {
+    dataKelas,
+    dataJurusan,
+    dataRuang
+  } from './uploadSiswa'
 
   export default {
     components: {
@@ -90,27 +95,38 @@
         dialog: false,
         valid: true,
         loading: false,
-        requiredRule: [v => !!v || 'Data harus diisi']
+        requiredRule: [v => !!v || 'Data harus diisi'],
+        dataSheets: []
       }
     },
 
     methods: {
-      importingData (e) {
+      importingData (e) {        
         var vm = this
         var reader = new FileReader()
         reader.readAsArrayBuffer(e);
         reader.onload = function(e) {
           var data = new Uint8Array(reader.result);
           var wb = XLSX.read(data, { type: "array" });
-          var worksheet = wb.Sheets[wb.SheetNames[0]];
-          var dataSheet = XLSX.utils.sheet_to_json(worksheet)
+          wb.SheetNames.map((sheet, index) => {
+            var worksheet = wb.Sheets[wb.SheetNames[index]];
+            var dataSheet = XLSX.utils.sheet_to_json(worksheet)
+            var dataSiswa = dataSheet.map(sheet => {
+              sheet.JURUSAN = wb.SheetNames[index]
+              return sheet
+            })
+
+            vm.dataSheets[index] = dataSiswa
+          })
           
-          console.log(dataSheet)
+          // console.log(vm.dataSheets)
         }
       },
       validate () {
         if (this.$refs.form.validate()) {
-          console.log('hh')
+          dataKelas(this.dataSheets)
+          dataJurusan(this.dataSheets)
+          dataRuang(this.dataSheets)
         }
       }
     }

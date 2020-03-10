@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <div>
+  	<router-view></router-view>
+  	<TokenExpired/>
+  </div>
 </template>
 
 <style>
@@ -11,3 +14,12 @@
   .border-top{ border-top: 1px solid #48AEF0 !important; }
   .w-100{ width: 100%; }
 </style>
+
+<script>
+	import TokenExpired from '@/views/TokenExpired'
+	export default {
+		components: {
+			TokenExpired
+		}
+	}
+</script>

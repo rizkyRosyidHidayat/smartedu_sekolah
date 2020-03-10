@@ -18,7 +18,7 @@ var initSample = ( function() {
 		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
 
 	return function() {
-		var editorElement = CKEDITOR.document.getById( 'editor' );
+		var editorElement = CKEDITOR.document.getById( 'cke_editor1' );
 
 		// :(((
 		if ( isBBCodeBuiltIn ) {

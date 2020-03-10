@@ -59,7 +59,7 @@
         </v-list-group>
         <v-list-item
           link
-          @click="$router.push({name: 'login', params: { user: 'sekolah' }})">
+          @click="keluar">
           <v-list-item-icon>
             <v-icon>mdi-exit-to-app</v-icon>
           </v-list-item-icon>
@@ -105,6 +105,13 @@
         { title: 'Ruang Kelas', icon: 'mdi-door', link: 'ruang' },
         { title: 'Mata Pelajaran', icon: 'mdi-book', link: 'mapel' }
       ]
-		})
+		}),
+
+    methods: {
+      keluar () {
+        window.localStorage.removeItem('token_sekolah')
+        this.$router.push({name: 'login'})
+      }
+    }
 	}
 </script>
