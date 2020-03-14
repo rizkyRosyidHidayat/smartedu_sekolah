@@ -2,8 +2,11 @@
 	<v-data-table
 		:headers="header"
 		:search="search"
-		:items="data"
+		:items="dataSiswa"
 		:items-per-page="10">
+		<template v-slot:item.room="{ item }">
+      {{ item.group }} {{ namaJurusan(item.major) }} {{ item.room }}
+    </template>
 		<template v-slot:no-data>
 			<v-alert type="info" class="mt-4 text-left">
 				Silahkan pilih jurusan dan kelas untuk menampilkan
@@ -48,12 +51,14 @@
 	import {
 		VDataTable, VAlert,
 		VSpacer
-	} from 'vuetify/lib'
+	} from 'vuetify/lib'	
 	import TambahSiswa from '@/components/Siswa/TambahSiswa'
 	import UploadSiswa from '@/components/Siswa/UploadSiswa.vue'
 	import KosongkanSiswa from '@/components/Siswa/KosongkanSiswa'
 	import EditSiswa from '@/components/Siswa/EditSiswa'
 	import HapusSiswa from '@/components/Siswa/HapusSiswa'
+
+	import { getDataSiswa } from '@/config/siswa'
 
 	export default {
 		components: {
@@ -68,25 +73,40 @@
 
 		data: () => ({
 			header: [
-				{ text: 'No', value: 'no', sortable: false },
-				{ text: 'Nama', value: 'provinsi', sortable: false },
-				{ text: 'NISN', value: 'kabupaten', sortable: false },
-				{ text: 'Password', value: 'nama', sortable: false },
-				{ text: 'Ruang Kelas', value: 'jenjang', sortable: false },
+				// { text: 'No', value: 'no', sortable: false },
+				{ text: 'Nama', value: 'name', sortable: false },
+				{ text: 'NISN', value: 'nisn', sortable: false },
+				{ text: 'Password', value: 'password', sortable: false },
+				{ text: 'Ruang Kelas', value: 'room', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			data: [
-				{
-					provinsi: 'Jawa Tengah',
-					kabupaten: 'Wonosobo',
-					nama: 'SMK N 1 Wonosobo',
-					jenjang: '2020',
-					username: 'VGCT89',
-					password: 'CCG567',
-					no: 1
-				}
-			],
-			search: ''
-		})
+			dataSiswa: [],
+			search: '',
+			isLoading: false
+		}),
+
+		methods: {
+			namaJurusan(jurusan) {
+				var nama = jurusan.split(' ')
+				var singkatan = nama.filter(nama => nama.toLowerCase() !== 'dan')
+					.map(nama => nama[0])
+				return singkatan.join('')
+			}
+		},
+
+		created () {
+			this.isLoading = true
+			getDataSiswa ()
+				.then(res => {
+					if (res.status === 200) {
+						this.dataSiswa = res.data.data
+						this.isLoading = false
+						// console.log(this.dataSiswa)
+					}
+				})
+				.catch(err => {
+					this.isLoading = false
+				})
+		}
 	}
 </script>

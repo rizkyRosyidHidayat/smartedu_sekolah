@@ -2,7 +2,7 @@
 	<v-row dense>
 		<v-col cols="12" md="6" sm="12">
 			<v-btn
-				depressed block outlined
+				depressed block 
 				color="primary">
 				<v-icon class="mr-3">mdi-school</v-icon>
 				Login sekolah
@@ -10,7 +10,7 @@
 		</v-col>
 		<v-col cols="12" md="6" sm="12">
 			<v-btn
-				depressed block
+				depressed block outlined
 				color="primary">
 				<v-icon class="mr-3">mdi-face</v-icon>
 				Login siswa

@@ -74,7 +74,7 @@
 			jurusan: '',
 			kelas: '',
 			ruang: '',
-			data: ['foo', 'bar', 'zee']
+			data: []
 		})
 	}
 </script>

@@ -2,7 +2,7 @@
 	<v-data-table
 		:headers="header"
 		:search="search"
-		:items="data"
+		:items="dataJurusan"
 		:items-per-page="10">
 		<template v-slot:top>
 			<div>
@@ -26,7 +26,7 @@
     </template>
 		<template v-slot:item.action="{item}">
 			<div class="d-flex">
-				<EditJurusan/>
+				<EditJurusan :detail="detailJurusan(item.id)" :kelas="dataKelas" />
 			</div>
 		</template>
 	</v-data-table>
@@ -38,6 +38,8 @@
 		VSpacer
 	} from 'vuetify/lib'
 	import EditJurusan from '@/components/Jurusan/EditJurusan'
+	import { getDataJurusan } from '@/config/jurusan'
+  import { getDataKelas } from '@/config/kelas'
 
 	export default {
 		components: {
@@ -48,19 +50,44 @@
 
 		data: () => ({
 			header: [
-				{ text: 'No', value: 'no', sortable: false },
-				{ text: 'Jurusan', value: 'jurusan', sortable: false },
-				{ text: 'Kelas', value: 'kelas', sortable: false },
+				// { text: 'No', value: 'no', sortable: false },
+				{ text: 'Jurusan', value: 'major', sortable: false },
+				{ text: 'Kelas', value: 'group', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			data: [
-				{
-					jurusan: 'Jawa Tengah',
-					kelas: 'X',
-					no: 1
-				}
-			],
-			search: ''
-		})
+			dataJurusan: [],
+			search: '',
+			isLoading: false,
+			dataKelas: []
+		}),
+
+		methods: {
+			detailJurusan (id) {
+				var hasil = this.dataJurusan.filter(jurusan => jurusan.id === id)
+				return {...hasil[0]}
+			}
+		},
+
+		created () {
+			this.isLoading = true
+			getDataJurusan ()
+				.then(res => {
+					if (res.status === 200) {
+						this.dataJurusan = res.data.data
+						this.isLoading = false
+						// console.log(this.dataJurusan)
+					}
+				})
+				.catch(err => {
+					this.isLoading = false
+				})
+
+			getDataKelas()
+        .then(res => {
+          if (res.status === 200) {
+            this.dataKelas = res.data.data
+          }
+        })
+		}
 	}
 </script>

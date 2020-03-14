@@ -2,7 +2,7 @@
   <v-data-table
     :headers="header"
     :search="search"
-    :items="data"
+    :items="dataSoal"
     :items-per-page="10">
     <template v-slot:top>
       <div>
@@ -11,7 +11,7 @@
           <v-btn 
             depressed
             color="success"
-            @click="$router.push({ name: 'tambah-soal' })">
+            @click="$router.push({ name: 'tambah-soal', params: { id: id, name: name } })">
             <v-icon class="mr-3">mdi-plus</v-icon>
             tambah soal
           </v-btn>   
@@ -26,7 +26,10 @@
         ></v-text-field>
       </div>
     </template>
-    <template v-slot:no-result>
+    <template v-slot:item.pertanyaan="{item}">
+      <div v-html="item.pertanyaan"></div>
+    </template>
+    <template v-slot:no-data>
       <v-alert type="info" class="mt-4">
         <div>Data tidak ditemukan</div>
       </v-alert>
@@ -53,6 +56,8 @@
   } from 'vuetify/lib'
   import HapusSoalMapel from '@/components/Soal/SoalMapel/HapusSoalMapel'
 
+  import {getDataSoal} from '@/config/soal'
+
   export default {
     components: {
       VDataTable, VAlert,
@@ -62,21 +67,33 @@
 
     data: () => ({
       header: [
-        { text: 'No', value: 'no', sortable: false },
-        { text: 'Pertanyaan', value: 'kelas', sortable: false },
+        // { text: 'No', value: 'no', sortable: false },
+        { text: 'Pertanyaan', value: 'pertanyaan', sortable: false },
         { text: 'Kunci Jawaban', value: 'jurusan', sortable: false },
         { text: 'Pembahasan', value: 'kkm', sortable: false },
         { text: 'Action', value: 'action', sortable: false }
       ],
-      data: [
-        {
-          kelas: 'X',
-          jurusan: 'Akuntansi',
-          kkm: '75',
-          no: 1
-        }
-      ],
-      search: ''
-    })
+      id: 0,
+      name: '',
+      dataSoal: [],
+      search: '',
+      isLoading: false
+    }),
+
+    created () {
+      this.isLoading = true
+      this.id = this.$route.params.id
+      this.name = this.$route.params.name
+      getDataSoal(parseInt(this.id))
+        .then(res => {
+          if (res.status === 200) {
+            this.dataSoal = res.data
+            this.isLoading = false
+          }
+        })
+        .catch(err => {
+          this.isLoading = false
+        })
+    }
   }
 </script>

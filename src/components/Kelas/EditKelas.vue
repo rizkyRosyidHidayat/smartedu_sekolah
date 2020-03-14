@@ -17,7 +17,7 @@
         <v-card-text class="pa-6 pb-0">
           <v-form v-model="valid" ref="form">
             <v-text-field
-              v-model="dataKelas.nama"
+              v-model="detail.name"
               label="Nama Kelas"
               outlined
               dense
@@ -61,6 +61,8 @@
   } from 'vuetify/lib'
 
   export default {
+    props: ['detail'],
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
@@ -73,8 +75,8 @@
       return {
         dialog: false,
         valid: true,
-        dataKelas: {
-          nama: ''
+        detailKelas: {
+          name: ''
         },
         items: ['foo', 'bar', 'zee'],
         requiredRule: [v => !!v || 'Data harus diisi']
@@ -84,7 +86,8 @@
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          console.log(this.dataKelas)
+          this.detailKelas.name = this.detail.name
+          // console.log(this.detailKelas)
         }
       }
     }

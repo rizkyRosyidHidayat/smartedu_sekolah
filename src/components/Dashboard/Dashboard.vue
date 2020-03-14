@@ -10,7 +10,7 @@
 					cols="12" 
 					md="3" sm="6"
 					v-for="(item, i) in informasi" :key="i">
-					<v-sheet :class="item.color[0]" dark tile>
+					<v-sheet :class="item.color[0]" dark>
 						<div class="pa-3">
 							<div class="display-1 font-weight-bold">{{item.total}}</div>
 							<div class="subtitle-1">
@@ -19,7 +19,7 @@
 							</div>
 						</div>
 						<div 
-							:class="`pa-3 ${item.color[1]} text-center pointer`"
+							:class="`pa-3 ${item.color[1]} text-center pointer radius`"
 	        		@click="$router.push({name: item.link})">
 							Selengkapnya <v-icon>mdi-chevron-right</v-icon>
 						</div>

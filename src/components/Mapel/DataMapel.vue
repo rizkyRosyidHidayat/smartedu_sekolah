@@ -2,13 +2,13 @@
 	<v-data-table
 		:headers="header"
 		:search="search"
-		:items="data"
+		:items="dataMapel"
 		:items-per-page="10">
 		<template v-slot:top>
 			<div>
 				<div class="d-flex">
 					<v-spacer></v-spacer>	
-					<TambahMapel/>				
+					<TambahMapel @updatedMapel="updatedMapel" />				
 				</div>
 				<v-text-field
 	        v-model="search"
@@ -41,6 +41,8 @@
 	import EditMapel from '@/components/Mapel/EditMapel'
 	import TambahMapel from '@/components/Mapel/TambahMapel'
 
+	import { getDataMapel } from '@/config/mapel'
+
 	export default {
 		components: {
 			VDataTable, VAlert,
@@ -51,23 +53,36 @@
 
 		data: () => ({
 			header: [
-				{ text: 'No', value: 'no', sortable: false },
-				{ text: 'Kelas', value: 'kelas', sortable: false },
-				{ text: 'Jurusan', value: 'jurusan', sortable: false },
-				{ text: 'Mata Pelajaran', value: 'nama', sortable: false },
-				{ text: 'KKM', value: 'kkm', sortable: false },
+				// { text: 'No', value: 'no', sortable: false },
+				{ text: 'Kelas', value: 'group', sortable: false },
+				{ text: 'Jurusan', value: 'major', sortable: false },
+				{ text: 'Mata Pelajaran', value: 'name', sortable: false },
+				{ text: 'KKM', value: 'score', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			data: [
-				{
-					nama: 'Bahasa Indonesia',
-					kelas: 'X',
-					jurusan: 'Akuntansi',
-					kkm: '75',
-					no: 1
-				}
-			],
-			search: ''
-		})
+			dataMapel: [],
+			search: '',
+			isLoading: false
+		}),
+
+		created () {
+			this.isLoading = true
+			getDataMapel ()
+				.then(res => {
+					if (res.status === 200) {
+						this.dataMapel = res.data.data
+						this.isLoading = false
+					}
+				})
+				.catch(err => {
+					this.isLoading = false					
+				})
+		},
+
+		methods: {
+			updatedMapel (val) {
+				this.dataMapel = val
+			}
+		}
 	}
 </script>

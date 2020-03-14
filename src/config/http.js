@@ -4,7 +4,7 @@ import store from '@/store/index'
 const http = axios.create({
 	baseURL: 'https://api.app.smart-edu.id/api/school/',
 	headers: {
-		'Authorization': 'bearer '+window.localStorage.getItem('token_admin'),
+		'Authorization': 'bearer '+window.localStorage.getItem('token_sekolah'),
 		// 'Content-Type': 'application/json',
 		// 'Accept': 'application/json'
 	}

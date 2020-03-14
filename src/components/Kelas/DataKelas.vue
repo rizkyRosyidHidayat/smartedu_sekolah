@@ -2,7 +2,7 @@
 	<v-data-table
 		:headers="header"
 		:search="search"
-		:items="data"
+		:items="dataKelas"
 		:items-per-page="10">
 		<template v-slot:top>
 			<div>
@@ -26,13 +26,14 @@
     </template>
 		<template v-slot:item.action="{item}">
 			<div class="d-flex">
-				<EditKelas/>
+				<EditKelas :detail="detailKelas(item.id)"/>
 			</div>
 		</template>
 	</v-data-table>
 </template>
 
 <script>
+	import { getDataKelas } from '@/config/kelas'
 	import {
 		VDataTable, VAlert,
 		VSpacer
@@ -48,9 +49,9 @@
 
 		data: () => ({
 			header: [
-				{ text: 'No', value: 'no', sortable: false },
-				{ text: 'Kelas', value: 'kelas', sortable: false },
-				{ text: 'Total Ruang Kelas', value: 'ruang', sortable: false },
+				// { text: 'No', value: 'no', sortable: false },
+				{ text: 'Kelas', value: 'name', sortable: false },
+				// { text: 'Total Ruang Kelas', value: 'ruang', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
 			data: [
@@ -60,7 +61,30 @@
 					no: 1
 				}
 			],
-			search: ''
-		})
+			dataKelas: [],
+			search: '',
+			isLoading: false
+		}),
+
+		methods: {
+			detailKelas (id) {
+				var hasil = this.dataKelas.filter(kelas => kelas.id === id)
+				return {...hasil[0]}
+			}
+		},
+
+		created () {
+			this.isLoading = true
+			getDataKelas ()
+				.then(res => {
+					if (res.status === 200) {
+						this.dataKelas = res.data.data
+						this.isLoading = false
+					}
+				})
+				.catch(err => {
+					this.isLoading = false
+				})
+		}
 	}
 </script>

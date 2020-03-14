@@ -52,14 +52,16 @@ const routes = [
         component: () => import('../views/Soal.vue')
       },
       {
-        path: '/soal-mapel',
+        path: '/soal-mapel/:id/:name',
         name: 'soal-mapel',
-        component: () => import('../components/Soal/SoalMapel.vue')
+        component: () => import('../components/Soal/SoalMapel.vue'),
+        props: true
       },
       {
-        path: '/tambah-soal',
+        path: '/tambah-soal/:id/:name',
         name: 'tambah-soal',
-        component: () => import('../components/Soal/SoalMapel/TambahSoalMapel.vue')
+        component: () => import('../components/Soal/SoalMapel/TambahSoalMapel.vue'),
+        props: true
       },
       {
         path: '/tes',

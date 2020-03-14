@@ -6,10 +6,10 @@
 		  		<img :src="require('@/assets/profil.jpg')" alt="profile" />
 		  	</v-avatar>
 		  	<div class="title mt-3">
-		  		SMK N 1 Wonosobo
+		  		{{ name }}
 		  	</div>
 		  	<div class="subtitle-1">
-		  		Wonosobo
+		  		{{ regency }}
 		  	</div>
   		</div>
   	</div>
@@ -104,8 +104,16 @@
         { title: 'Jurusan', icon: 'mdi-medal', link: 'jurusan' },
         { title: 'Ruang Kelas', icon: 'mdi-door', link: 'ruang' },
         { title: 'Mata Pelajaran', icon: 'mdi-book', link: 'mapel' }
-      ]
+      ],
+      name: '',
+      regency: ''
 		}),
+
+    created () {
+      var school = JSON.parse(window.localStorage.getItem('data_sekolah'))
+      this.name = school.user_name
+      this.regency = school.user_regency      
+    },
 
     methods: {
       keluar () {

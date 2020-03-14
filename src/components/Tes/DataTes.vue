@@ -104,7 +104,8 @@
 				{ colom: 'Tanggal Sync', value: '29/03/2020' },
 				{ colom: 'Tanggal Tes', value: '30/03/2020' },
 				{ colom: 'Token', value: 'THK765' }
-			]
+			],
+			search: ''
 		})
 	}
 </script>

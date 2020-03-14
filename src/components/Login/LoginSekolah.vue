@@ -1,7 +1,7 @@
 <template>
 	<v-form v-model="valid" ref="form">
 		<v-card-text class="pb-0">
-			<v-row dense>
+			<!-- <v-row dense>
 				<v-col cols="12" md="6" sm="12">
 					<v-select
 	          :items="tahun"
@@ -22,7 +22,7 @@
 	          :rules="requiredRule"              
 	        ></v-select>
 				</v-col>
-			</v-row>	
+			</v-row> -->	
 			<v-text-field
 	      v-model="dataLogin.username"
 	      label="Username"

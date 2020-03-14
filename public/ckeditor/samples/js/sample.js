@@ -1,5 +1,5 @@
 ﻿/**
- * Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -18,7 +18,7 @@ var initSample = ( function() {
 		isBBCodeBuiltIn = !!CKEDITOR.plugins.get( 'bbcode' );
 
 	return function() {
-		var editorElement = CKEDITOR.document.getById( 'cke_editor1' );
+		var editorElement = CKEDITOR.document.getById( 'editor' );
 
 		// :(((
 		if ( isBBCodeBuiltIn ) {

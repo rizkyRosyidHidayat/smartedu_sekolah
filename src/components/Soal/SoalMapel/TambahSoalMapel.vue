@@ -2,11 +2,12 @@
 	<v-card outlined class="border-card">
 		<div class="pa-3 se-primary white--text">
 			<v-icon color="white">mdi-file</v-icon>
-			<span class="ml-3 text-icon">Tambah Soal X_RPL_Bahasa Indonesia</span>
+			<span class="ml-3 text-icon">Tambah Soal {{ name }}</span>
 		</div>
 		<v-card-text>
+			<Notif :msg="msg" :status="status" @visible="visible" />
 			<div class="title">Soal</div>
-			<ckeditor v-model="dataSoal.soal"></ckeditor>
+			<VueCkeditor v-model="dataSoal.pertanyaan" />
 			<br>
 			<div class="title">Kunci Jawaban</div>
 			<v-select
@@ -26,15 +27,36 @@
 					active-class="outlined-tab">
 					{{ item.text }}
 				</v-tab>
-				<v-tab-item
-	        v-for="(item, i) in tabs"
-	        :key="i"
-	        :value="'tab-' + i">
-	        <br>
-					<ckeditor v-model="tab"></ckeditor>
+				<v-tab-item value="tab-0">
+					<br>
+					<VueCkeditor id="jawabanA" v-model="dataSoal.jawabanA" />
+	      </v-tab-item>
+	      <v-tab-item value="tab-1">
+					<br>
+					<VueCkeditor id="jawabanB" v-model="dataSoal.jawabanB" />
+	      </v-tab-item>
+	      <v-tab-item value="tab-2">
+					<br>
+					<VueCkeditor id="jawabanC" v-model="dataSoal.jawabanC" />
+	      </v-tab-item>
+	      <v-tab-item value="tab-3">
+					<br>
+					<VueCkeditor id="jawabanD" v-model="dataSoal.jawabanD" />
+	      </v-tab-item>
+	      <v-tab-item value="tab-4">
+					<br>
+					<VueCkeditor id="jawabanE" v-model="dataSoal.jawabanE" />
 	      </v-tab-item>
 			</v-tabs>
+			<br>		
+			<div class="title">Pembahasan</div>
+			<VueCkeditor v-model="dataSoal.pembahasan" />
 		</v-card-text>
+		<v-card-actions>
+			<v-spacer></v-spacer>
+			<v-btn text color="primary" @click="$router.go(-1)">kembali</v-btn>
+			<v-btn depressed :loading="isLoading" color="primary" @click="simpan">simpan</v-btn>
+		</v-card-actions>
 	</v-card>
 </template>
 
@@ -49,50 +71,98 @@
 		VIcon, VBtn,
 		VRow, VSelect, VCol,
 		VSpacer, VTabs, VTabsSlider,
-		VTab, VTabItem
+		VTab, VTabItem, VCardActions
 	} from 'vuetify/lib'
 
+	import { postDataSoal } from '@/config/soal'
+
+	import VueCkeditor from './vueckeditor'
+	import Notif from '@/components/Notif'
+
+	// initSample()
+
 	export default {
+		props: ['id', 'name'],
+
 		components: {
 			VCard, VCardText,
 			VIcon, VBtn,
 			VRow, VSelect, VCol,
 			VSpacer, VTabs, VTabsSlider,
-			VTab, VTabItem
+			VTab, VTabItem, VCardActions,
+			VueCkeditor, Notif
 		},
 
 		data: () => ({
 			dataSoal: {
-				soal: '',
+				pertanyaan: '',
 				kunci: '',
-				a: '',
-				b: '',
-				c: '',
-				d: '',
-				e: ''
+				jawabanA: '',
+				jawabanB: '',
+				jawabanC: '',
+				jawabanD: '',
+				jawabanE: '',
+				pembahasan: '',
+				id_subject: 0
 			},
 			kunci: ['A', 'B', 'C', 'D', 'E'],
 			tab: null,
+			indexTab: 0,
 			tabs: [{
-				text: 'Jawaban A',
-				value: 'dataSoal.a'
+				text: 'Jawaban A'				
 			}, 
 			{
-				text: 'Jawaban B',
-				value: 'dataSoal.b'
+				text: 'Jawaban B'				
 			},
 			{
-				text: 'Jawaban C',
-				value: 'dataSoal.c'
+				text: 'Jawaban C'				
 			},
 			{
-				text: 'Jawaban D',
-				value: 'dataSoal.d'
+				text: 'Jawaban D'				
 			},
 			{
-				text: 'Jawaban E',
-				value: 'dataSoal.e'
-			}]
-		})
+				text: 'Jawaban E'				
+			}],
+			isLoading: false,
+			status: null,
+			msg: {
+				success: 'Soal berhasil ditambahkan',
+				error: 'Soal gagal ditambahkan',
+				visible: false
+			}
+		}),
+
+		methods: {
+			simpan () {
+				// this.dataSoal.jawabanA = this.option[0]
+				// this.dataSoal.jawabanB = this.option[1]
+				// this.dataSoal.jawabanC = this.option[2]
+				// this.dataSoal.jawabanD = this.option[3]
+				// this.dataSoal.jawabanE = this.option[4]
+				this.dataSoal.id_subject = parseInt(this.id)
+				this.isLoading = true
+				postDataSoal (this.dataSoal)
+					.then(res => {
+						// console.log(res)
+						if (res.status === 201) {
+							this.isLoading = false
+							this.status = true
+						}
+					})
+					.catch(err => {
+						this.isLoading = false
+						this.status = false
+					})
+				this.msg.visible = true
+				window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
+			},
+			visible(val) {
+				this.msg.visible = val
+			}
+		}
 	}
 </script>

@@ -13,6 +13,7 @@
   .border-bottom{ border-bottom: 1px solid #48AEF0 !important; }
   .border-top{ border-top: 1px solid #48AEF0 !important; }
   .w-100{ width: 100%; }
+  .radius{ border-radius: 3px !important; }
 </style>
 
 <script>

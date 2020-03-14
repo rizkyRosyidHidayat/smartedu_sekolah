@@ -16,22 +16,24 @@
         </div>
         <v-card-text class="pa-6 pb-0">
           <v-form v-model="valid" ref="form">
+            <v-select
+              :items="kelas"
+              item-text="name"
+              item-value="id"
+              v-model="detailJurusan.group_id"
+              label="Kelas"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select> 
             <v-text-field
-              v-model="dataJurusan.nama"
+              v-model="detail.major"
               label="Nama Jurusan"
               outlined
               dense
               :rules="requiredRule"
               autocomplete="off"
-            ></v-text-field>
-            <v-select
-              :items="items"
-              v-model="dataJurusan.id_kelas"
-              label="Kelas"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select>            
+            ></v-text-field>           
           </v-form>
         </v-card-text>
 
@@ -69,6 +71,8 @@
   } from 'vuetify/lib'
 
   export default {
+    props: ['detail', 'kelas'],
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
@@ -81,11 +85,11 @@
       return {
         dialog: false,
         valid: true,
-        dataJurusan: {
-          id_kelas: '',
-          nama: ''
+        detailJurusan: {
+          group_id: '',
+          name: ''
         },
-        items: ['foo', 'bar', 'zee'],
+        dataKelas: [],
         requiredRule: [v => !!v || 'Data harus diisi']
       }
     },
@@ -93,9 +97,17 @@
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          console.log(this.dataJurusan)
+          this.detailJurusan.name = this.detail.major
+          console.log(this.detailJurusan)
         }
       }
-    }
+    },
+
+    created () {      
+      var kelas = this.kelas
+        .filter(kelas => kelas.name === this.detail.group.toString())
+      this.detailJurusan.group_id = {...kelas[0]}.id
+      // console.log(this.detail.group)
+    },
   }
 </script>

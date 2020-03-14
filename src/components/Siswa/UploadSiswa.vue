@@ -31,7 +31,7 @@
           </div>
           <v-form v-model="valid" ref="form">
             <v-file-input
-              :loading="loading"
+              :loading="isLoading"
               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
               show-size
               counter
@@ -40,6 +40,8 @@
               label="File excel template"
             ></v-file-input>
           </v-form>
+
+          <Notif :status="status" :visible="isVisible" :upload="dataUpload" @visible="visible" />
         </v-card-text>
 
         <v-divider></v-divider>
@@ -54,6 +56,7 @@
           </v-btn>
           <v-btn
             :disabled="!valid"
+            :loading="isLoading"
             color="primary"
             @click.prevent="validate"
             type="submit"
@@ -75,11 +78,11 @@
     VIcon
   } from 'vuetify/lib'
   import XLSX from 'xlsx'
+  import { postDataSiswa } from '@/config/siswa'
   import {
-    dataKelas,
-    dataJurusan,
     dataRuang
   } from './uploadSiswa'
+  import Notif from './Notif'
 
   export default {
     components: {
@@ -87,16 +90,19 @@
       VCardText, VCardActions,
       VBtn, VDivider,
       VForm, VFileInput, VSpacer,
-      VIcon
+      VIcon, Notif
     },
 
     data () {
       return {
         dialog: false,
         valid: true,
-        loading: false,
+        isLoading: false,
+        status: null,
         requiredRule: [v => !!v || 'Data harus diisi'],
-        dataSheets: []
+        dataSheets: [],
+        isVisible: false,
+        dataUpload: {},
       }
     },
 
@@ -124,10 +130,23 @@
       },
       validate () {
         if (this.$refs.form.validate()) {
-          dataKelas(this.dataSheets)
-          dataJurusan(this.dataSheets)
-          dataRuang(this.dataSheets)
+          // dataRuang(this.dataSheets)
+          this.isLoading = true
+          postDataSiswa(dataRuang(this.dataSheets))          
+            .then(res => {
+              this.dataUpload = res.data.data
+              this.isLoading = false
+              this.status = true
+            })
+            .catch(err => {
+              this.isLoading = false
+              this.status = false
+            })
+          this.isVisible = true
         }
+      },
+      visible (val) {
+        this.isVisible = val
       }
     }
   }
