@@ -24,7 +24,7 @@
             Silahkan upload data dari excel sesuai template yang sudah disediakan, jika belum ada silahkan download templatenya 
             <a
               target="_blank"
-              href="https://drive.google.com/open?id=12NBX_iSqqvZJPBG-ZtjLBZdu8ftUEXaB"
+              href="https://app.smart-edu.id/sekolah/downloads/TEMPLATE_DATA_PESERTA_USBK.xlsx"
             >
               disini.
             </a>
@@ -130,13 +130,18 @@
       },
       validate () {
         if (this.$refs.form.validate()) {
-          // dataRuang(this.dataSheets)
+          // console.log(dataRuang(this.dataSheets))
           this.isLoading = true
           postDataSiswa(dataRuang(this.dataSheets))          
             .then(res => {
-              this.dataUpload = res.data.data
-              this.isLoading = false
-              this.status = true
+              // console.log(res)
+              if (res.status === 200) {
+                this.dataUpload = res.data.data
+                // this.$store.dispatch('dataSiswa/getDataSiswa')
+                this.isLoading = false
+                this.status = true
+                // window.location.href = '/sekolah/siswa'
+              }
             })
             .catch(err => {
               this.isLoading = false

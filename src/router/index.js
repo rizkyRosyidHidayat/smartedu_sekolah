@@ -15,6 +15,7 @@ const routes = [
   {
     path: '/',
     component: Dashboard,
+    meta: { requiresAuth: true },    
     children: [
       {
         path: '/',
@@ -64,16 +65,44 @@ const routes = [
         props: true
       },
       {
+        path: '/edit-soal/:idSoal/:idMapel',
+        name: 'edit-soal',
+        component: () => import('../components/Soal/SoalMapel/EditSoalMapel.vue'),
+        props: true
+      },
+      {
         path: '/tes',
         name: 'tes',
         component: () => import('../views/Tes.vue')
+      },
+      {
+        path: '/profil',
+        name: 'profil',
+        component: () => import('../views/Profil.vue')
+      },
+      {
+        path: '/nilai',
+        component: () => import('../views/Assessment.vue'),
+        children: [
+          {
+            path: '/nilai',
+            component: () => import('../components/Assessment/RekapitulasiNilai/RekapitulasiNilai.vue'),
+            name: 'nilai'
+          },
+          {
+            path: '/peringkat',
+            component: () => import('../components/Assessment/Peringkat/Peringkat.vue'),
+            name: 'peringkat'
+          }
+        ]
       }      
     ]
   },
   {
-    path: '/review',
+    path: '/review/:id/:name',
     name: 'review',
-    component: ReviewSoal
+    component: ReviewSoal,
+    props: true
   },
 ]
 

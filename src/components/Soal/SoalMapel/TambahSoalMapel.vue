@@ -29,23 +29,23 @@
 				</v-tab>
 				<v-tab-item value="tab-0">
 					<br>
-					<VueCkeditor id="jawabanA" v-model="dataSoal.jawabanA" />
+					<VueCkeditor v-model="dataSoal.jawabanA" />
 	      </v-tab-item>
 	      <v-tab-item value="tab-1">
 					<br>
-					<VueCkeditor id="jawabanB" v-model="dataSoal.jawabanB" />
+					<VueCkeditor v-model="dataSoal.jawabanB" />
 	      </v-tab-item>
 	      <v-tab-item value="tab-2">
 					<br>
-					<VueCkeditor id="jawabanC" v-model="dataSoal.jawabanC" />
+					<VueCkeditor v-model="dataSoal.jawabanC" />
 	      </v-tab-item>
 	      <v-tab-item value="tab-3">
 					<br>
-					<VueCkeditor id="jawabanD" v-model="dataSoal.jawabanD" />
+					<VueCkeditor v-model="dataSoal.jawabanD" />
 	      </v-tab-item>
 	      <v-tab-item value="tab-4">
 					<br>
-					<VueCkeditor id="jawabanE" v-model="dataSoal.jawabanE" />
+					<VueCkeditor v-model="dataSoal.jawabanE" />
 	      </v-tab-item>
 			</v-tabs>
 			<br>		
@@ -53,9 +53,29 @@
 			<VueCkeditor v-model="dataSoal.pembahasan" />
 		</v-card-text>
 		<v-card-actions>
+			<v-snackbar
+				v-model="valid"
+				color="warning"
+				dark
+				timeleft="2000">
+				Data yang dimasukan belum lengkap, silahkan lengkapi
+				terlebih dahulu.
+				<v-btn
+	        icon
+	        dark
+	        @click="valid = false">
+	        <v-icon>mdi-close-circle</v-icon>
+	      </v-btn>
+			</v-snackbar>
 			<v-spacer></v-spacer>
 			<v-btn text color="primary" @click="$router.go(-1)">kembali</v-btn>
-			<v-btn depressed :loading="isLoading" color="primary" @click="simpan">simpan</v-btn>
+			<v-btn 
+				depressed
+				:loading="isLoading" 
+				color="primary" 
+				@click="simpan">
+				simpan
+			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
@@ -71,12 +91,13 @@
 		VIcon, VBtn,
 		VRow, VSelect, VCol,
 		VSpacer, VTabs, VTabsSlider,
-		VTab, VTabItem, VCardActions
+		VTab, VTabItem, VCardActions, VSnackbar
 	} from 'vuetify/lib'
 
 	import { postDataSoal } from '@/config/soal'
 
-	import VueCkeditor from './vueckeditor'
+	import Loader from '@/components/Loader'
+	// import VueCkeditor from './vueckeditor'
 	import Notif from '@/components/Notif'
 
 	// initSample()
@@ -89,11 +110,21 @@
 			VIcon, VBtn,
 			VRow, VSelect, VCol,
 			VSpacer, VTabs, VTabsSlider,
-			VTab, VTabItem, VCardActions,
-			VueCkeditor, Notif
+			VTab, VTabItem, VCardActions, VSnackbar,
+			VueCkeditor: () => ({
+	      component: import('./vueckeditor.vue'),
+	      loading: Loader,
+	      error: {
+	        template: '<div>...error</div>'
+	      },
+	      delay: 200,
+	      timeout: 3000
+	    }),
+	    Notif
 		},
 
 		data: () => ({
+			valid: false,
 			dataSoal: {
 				pertanyaan: '',
 				kunci: '',
@@ -140,25 +171,38 @@
 				// this.dataSoal.jawabanD = this.option[3]
 				// this.dataSoal.jawabanE = this.option[4]
 				this.dataSoal.id_subject = parseInt(this.id)
-				this.isLoading = true
-				postDataSoal (this.dataSoal)
-					.then(res => {
-						// console.log(res)
-						if (res.status === 201) {
+
+				var hasil = []
+
+				for (let [key, value] of Object.entries(this.dataSoal)) {
+				  hasil.push(value)
+				}
+				var kosong = hasil.includes('')
+				
+				if (!kosong) {
+					this.isLoading = true
+					postDataSoal (this.dataSoal)
+						.then(res => {
+							// console.log(res)
+							if (res.status === 201) {
+								this.isLoading = false
+								this.status = true
+								this.$router.go(-1)							
+							}
+						})
+						.catch(err => {
 							this.isLoading = false
-							this.status = true
-						}
-					})
-					.catch(err => {
-						this.isLoading = false
-						this.status = false
-					})
-				this.msg.visible = true
-				window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth'
-        });
+							this.status = false
+						})
+					this.msg.visible = true
+					window.scrollTo({
+	          top: 0,
+	          left: 0,
+	          behavior: 'smooth'
+	        });					
+				} else {
+					this.valid = true
+				}
 			},
 			visible(val) {
 				this.msg.visible = val

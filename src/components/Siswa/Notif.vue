@@ -10,7 +10,7 @@
 			</v-btn>
 			<div>
 				Proses upload berhasil. <br>
-				Status: <br>
+				<!-- Status: <br>
 				<span>					
 					{{upload.group}} kelas, 
 				</span>
@@ -22,7 +22,7 @@
 				</span>
 				<span>					
 					{{upload.participant}} siswa
-				</span>
+				</span> -->
 			</div>
 			<v-spacer></v-spacer>
 			<v-btn @click="close" icon small dark>

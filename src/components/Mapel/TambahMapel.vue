@@ -18,25 +18,25 @@
         <div class="pa-3 se-primary white--text text-center">
           <span class="title">Tambah Mapel</span>
         </div>
-        <v-card-text class="pa-6 pb-0">
-          <v-form v-model="valid" ref="form">
+        <v-form v-model="valid" ref="form">
+          <v-card-text class="pa-6 pb-0">
             <v-select
-              :items="dataKelas"
-              item-text="name"
-              return-object
-              v-model="dataMapel.group_id"
-              label="Kelas"
+              :items="dataJurusan"
+              item-text="major.name"
+              item-value="major.id"
+              v-model="dataMapel.major_id"
+              label="Jurusan"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
             <v-select
-              :items="dataJurusan"
-              item-text="major"
-              item-value="id"
-              v-model="dataMapel.major_id"
-              :disabled="dataMapel.group_id === ''?true:false"
-              label="Jurusan"
+              :items="detailKelas"
+              item-text="group.name"
+              item-value="group.id"
+              v-model="dataMapel.group_id"
+              :disabled="dataMapel.major_id === ''?true:false"
+              label="Kelas"
               outlined
               dense
               :rules="requiredRule"              
@@ -55,6 +55,7 @@
               <v-col cols="12" sm="4">
                 <v-text-field
                   v-model="dataMapel.score"
+                  v-mask="mask"
                   label="KKM"
                   outlined
                   dense
@@ -63,31 +64,31 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          </v-form>
 
-          <Notif :msg="msg" :status="status" @visible="visible" />
-        </v-card-text>
+            <Notif :msg="msg" :status="status" @visible="visible" />
+          </v-card-text>
 
-        <v-divider></v-divider>
+          <v-divider></v-divider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false">
-            kembali
-          </v-btn>
-          <v-btn
-            :disabled="!valid"
-            color="primary"
-            :loading="isLoading"
-            @click.prevent="validate"
-            type="submit"
-            depressed>
-            simpan
-          </v-btn>
-        </v-card-actions>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="dialog = false">
+              kembali
+            </v-btn>
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              :loading="isLoading"
+              @click.prevent="validate"
+              type="submit"
+              depressed>
+              simpan
+            </v-btn>
+          </v-card-actions>
+        </v-form>        
       </v-card>
     </v-dialog>
   </div>
@@ -101,12 +102,15 @@
     VForm, VTextField, VSelect, VSpacer,
     VIcon, VRow, VCol
   } from 'vuetify/lib'
-  import { postDataMapel } from '@/config/mapel'
-  import { getDataKelas } from '@/config/kelas'
-  import { getDataJurusan } from '@/config/jurusan'
+  import { mask } from 'vue-the-mask'
   import Notif from '@/components/Notif'
+  import { mapState } from 'vuex'
 
   export default {
+    directives: {
+      mask
+    },
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
@@ -126,12 +130,10 @@
           score: '',
           school_id: ''
         },
-        group_id: 0,
-        dataKelas: [],
-        dataJurusan: [],
+        mask: '##',
+        major_id: 0,
+        detailKelas: [],
         requiredRule: [v => !!v || 'Data harus diisi'],
-        isLoading: false,
-        status: null,
         msg: {
           success: 'Data berhasil ditambahkan',
           error: 'Data tidak gagal ditambahkan',
@@ -140,27 +142,15 @@
       }
     },
 
-    created () {
-      getDataKelas ()
-        .then(res => {
-          if (res.status === 200) {
-            this.dataKelas = res.data.data
-          }
-        })
-      getDataJurusan ()
-        .then(res => {
-          if (res.status === 200) {
-            this.dataJurusan = res.data.data
-          }
-        })
-    },
-
     watch: {
-      'dataMapel.group_id': function (val) {
-        this.dataJurusan = this.dataJurusan.filter(jurusan => jurusan.group.toString() === val.name)
-        this.group_id = val.id
+      'dataMapel.major_id': function (val) {
+        this.detailKelas = this.dataJurusan.filter(jurusan => jurusan.major.id === val)
         // console.log(val.id)
       }
+    },
+
+    computed: {
+      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status'])
     },
 
     methods: {
@@ -168,21 +158,23 @@
         if (this.$refs.form.validate()) {
           // console.log(this.dataMapel)
           var school = JSON.parse(window.localStorage.getItem('data_sekolah'))
-          this.dataMapel.group_id = this.group_id
-          this.dataMapel.school_id = school.user_id
-          this.isLoading = true
-          postDataMapel (this.dataMapel)
-            .then(res => {
-              if (res.status === 200) {
-                this.isLoading = false
-                this.status = true
-                this.$emit('updatedMapel', res.data.data)
-              }
-            })
-            .catch(err => {
-              this.isLoading = false
-              this.status = false
-            })
+          this.dataMapel.school_id = school.id
+          this.$store.dispatch('dataMaster/postDataMapel', this.dataMapel)
+          this.$store.dispatch('dataMaster/updateIsLoading', true)
+          // this.isLoading = true
+          // postDataMapel (this.dataMapel)
+          //   .then(res => {
+          //     if (res.status === 200) {
+          //       this.isLoading = false
+          //       this.status = true
+          //       this.$emit('updatedMapel', res.data.data)
+          //       this.dialog = false
+          //     }
+          //   })
+          //   .catch(err => {
+          //     this.isLoading = false
+          //     this.status = false
+          //   })
           this.msg.visible = true
         }
       },

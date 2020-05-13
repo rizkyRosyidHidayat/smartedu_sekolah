@@ -8,51 +8,56 @@
         SmartEdu
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text color="primary">
-				<v-icon class="mr-3">mdi-pencil</v-icon>
-				Edit    			
+      <v-btn icon color="primary" @click="$router.push({ name: 'edit-soal', params: { idSoal: dataSoal[page].id, idMapel: $route.params.id } })">
+				<v-icon small>mdi-pencil</v-icon>		
   		</v-btn>
-  		<v-btn text color="error">
+  		<!-- <v-btn text color="error">
 				<v-icon class="mr-3">mdi-trash-can</v-icon>   
 				hapus 			
-  		</v-btn>
+  		</v-btn> -->
+  		<HapusSoalMapel :id="dataSoal[page].id" :idMapel="$route.params.id" />
     </v-app-bar>
 
     <v-content>
     	<v-container>
     		<div class="my-6">
-	    		Soal 1
-	    		<span class="ml-3 font-weight-bold">Bahasa Indonesia</span>
+	    		Soal {{ page+1 }}
+	    		<span class="ml-3 font-weight-bold">{{ name }}</span>
 	    	</div>
 	      <v-card class="scroll pa-4" max-height="63vh" height="63vh">
-	      	<v-card-text>
-	      		<p>
-	      			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-	      			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-	      			quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.
-	      		</p>
+	      	<Loader type="paragraph" v-if="isLoading" />
+	      	<template v-else-if="dataSoal.length === 0">
+	      		<v-alert type="info">
+	      			Soal pada mata pelajaran ini masih kosong, silahkan tambahkan soalnya terlebih dahulu.
+	      		</v-alert>
+	      	</template>
+	      	<template v-else v-for="(item, index) in dataSoal">
+		      	<v-card-text v-if="index === page" :key="index" class="black--text">		      		
+		      		<div v-html="item.pertanyaan"></div>
 
-	      		<div class="mt-6 ml-3">
-	      			<div 
-								class="custom-control custom-radio my-2" 
-								v-for="(item, index) in jawaban" 
-								:key="index">
-							  <input 
-							  	type="radio" 
-							  	name="jawaban" 
-							  	:id="`jawaban${index}`"
-							  	v-model="selected" 
-							  	:value="item.huruf" 
-							  	class="custom-control-input"
-							  	:class="`radio${index}`" />
-							  <label 
-							  	:class="`custom-control-label huruf${index}`"
-							  	:for="`jawaban${index}`" 
-							  	v-html="item.teks"
-							  ></label>
-							</div>
-	      		</div>
-	      	</v-card-text>
+		      		<div class="mt-6 ml-3">
+		      			<div 
+									class="custom-control custom-radio my-2" 
+									v-for="(jawaban, index) in item.pilihanjawaban" 
+									:key="index">
+								  <input 
+								  	type="radio" 
+								  	name="jawaban" 
+								  	:id="`jawaban${index}`"
+								  	v-model="selected" 
+								  	readonly 
+								  	:value="jawaban.key" 
+								  	class="custom-control-input"
+								  	:class="`radio${index}`" />
+								  <label 
+								  	:class="`custom-control-label huruf${index}`"
+								  	:for="`jawaban${index}`" 
+								  	v-html="jawaban.teks"
+								  ></label>
+								</div>
+		      		</div>
+		      	</v-card-text>	      		
+	      	</template>
 	      </v-card>
     	</v-container>
     </v-content>    
@@ -62,18 +67,21 @@
 				<div class="pagination">
 					<v-btn 
 						depressed
+						:style="{'display': page === 0?'none':'inline-block'}"
 						dark
+						@click="page = page-1"
 						color="orange"
 						class="pa-0 mr-2">					
 						<v-icon>mdi-chevron-left</v-icon>					
 					</v-btn>
-					<template v-for="(item, index) in 50">
+					<template v-for="(item, index) in dataSoal.length">
 						<!-- <span v-for="(val, i) in local" :key="i+100"> -->
 							<v-btn
 								depressed 
 								color="primary" 
-								outlined
+								:outlined="index === page?false:true"
 								class="pa-0 mx-1"
+								@click="page = index"
 								:key="index">
 								{{ index+1 }}
 							</v-btn>
@@ -81,6 +89,8 @@
 					</template>
 					<v-btn 
 						depressed
+						:style="{'display': page === dataSoal.length-1?'none':'inline-block'}"
+						@click="page = page+1"
 						dark
 						color="orange"
 						class="pa-0 ml-2">					
@@ -139,9 +149,9 @@
     background-color: #fff;    
     border: 1px solid silver;
 	}
-	.custom-control:hover .custom-control-label::before{
+	/*.custom-control:hover .custom-control-label::before{
     background-color: #dee2e6;    		
-	}
+	}*/
 	.huruf0::before{
     content: "A";		
 	}
@@ -188,10 +198,15 @@
     VAppBarNavIcon,
     VToolbarTitle,
     VCard, VCardText, 
-    VContainer, VPagination
+    VContainer
   } from 'vuetify/lib'
+  import HapusSoalMapel from '@/components/Soal/SoalMapel/HapusSoalMapel'  
+  import Loader from '@/components/Loader'
+  import {getDataSoal} from '@/config/soal'
 
   export default {
+  	props: ['id', 'name'],
+
     components: {
       VApp,
       VContent,
@@ -200,11 +215,14 @@
       VAppBarNavIcon,
       VToolbarTitle,
       VCard, VCardText, 
-      VContainer, VPagination
+      VContainer,
+      HapusSoalMapel,
+      Loader
     },
 
     data: () => ({
-    	page: 1,
+    	page: 0,
+    	dataSoal: [{ id: 0 }],
     	jawaban: [
     		{ teks: 'lorem ipsum dolor', huruf: 'A' },
     		{ teks: 'lorem ipsum dolor', huruf: 'B' },
@@ -213,7 +231,37 @@
     		{ teks: 'lorem ipsum dolor', huruf: 'E' }
     	],
     	selected: '',
-			option: ['a', 'b', 'c', 'd', 'e']
-    })
+			option: ['a', 'b', 'c', 'd', 'e'],
+			isLoading: false
+    }),
+
+    created () {
+      this.isLoading = true
+      getDataSoal(parseInt(this.id))
+        .then(res => {
+          if (res.status === 200) {
+            this.dataSoal = res.data
+            this.selected = res.data[this.page].jawaban[0].kunci
+            this.isLoading = false
+          }
+        })
+        .catch(err => {
+          this.isLoading = false
+        })
+    },
+
+    watch: {
+    	page (val) {
+    		this.dataSoal.filter((soal, index) => {
+    			if (index === val) {
+    				soal.pilihanjawaban.filter(jawaban => {
+    					if (jawaban.key === soal.jawaban[0].kunci) {
+    						this.selected = jawaban.key
+    					}
+    				})
+    			}
+    		})
+    	}
+    }
   }
 </script>

@@ -14,63 +14,77 @@
         <div class="pa-3 se-primary white--text text-center">
           <span class="title">Edit Mata Pelajaran</span>
         </div>
-        <v-card-text class="pa-6 pb-0">
-          <v-form v-model="valid" ref="form">
+        <v-form v-model="valid" ref="form">
+          <v-card-text class="pa-6 pb-0">
             <v-select
-              :items="items"
-              v-model="dataMapel.id_jurusan"
+              :items="dataJurusan"
+              item-text="major.name"
+              item-value="major.id"
+              v-model="data.major.id"
               label="Jurusan"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
             <v-select
-              :items="items"
-              v-model="dataMapel.id_kelas"
+              :items="detailKelas"
+              item-text="group.name"
+              item-value="group.id"
+              v-model="data.group.id"
+              :disabled="data.major.id === ''?true:false"
               label="Kelas"
-              :disabled="dataMapel.id_kelas === ''?true:false"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
-            <v-text-field
-              v-model="dataMapel.nama"
-              label="Mata pelajaran"
-              outlined
-              dense
-              :rules="requiredRule"
-              autocomplete="off"
-            ></v-text-field> 
-            <v-text-field
-              v-model="dataMapel.kkm"
-              label="Mata pelajaran"
-              outlined
-              dense
-              :rules="requiredRule"
-              autocomplete="off"
-            ></v-text-field>            
-          </v-form>
-        </v-card-text>
+            <v-row>
+              <v-col cols="12" sm="8">
+                <v-text-field
+                  v-model="data.name"
+                  label="Nama Mapel"
+                  outlined
+                  dense
+                  :rules="requiredRule"
+                  autocomplete="off"
+                ></v-text-field>                
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-text-field
+                  v-model="data.score"
+                  v-mask="mask"
+                  label="KKM"
+                  outlined
+                  dense
+                  :rules="requiredRule"
+                  autocomplete="off"
+                ></v-text-field>
+              </v-col>
+            </v-row>      
 
-        <v-divider></v-divider>
+            <Notif :msg="msg" :status="status" @visible="visible" />
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false">
-            kembali
-          </v-btn>
-          <v-btn
-            :disabled="!valid"
-            color="primary"
-            @click.prevent="validate"
-            type="submit"
-            depressed>
-            simpan
-          </v-btn>
-        </v-card-actions>
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="dialog = false">
+              kembali
+            </v-btn>
+            <v-btn
+              :disabled="!valid"
+              color="primary"
+              :loading="isLoading"
+              @click.prevent="validate"
+              type="submit"
+              depressed>
+              simpan
+            </v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
@@ -84,14 +98,23 @@
     VForm, VTextField, VSelect, VSpacer,
     VIcon
   } from 'vuetify/lib'
+  import Notif from '@/components/Notif'
+  import { mapState } from 'vuex'
+  import { mask } from 'vue-the-mask'
 
   export default {
+    props: ['data'],
+
+    directives: {
+      mask
+    },
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
       VBtn, VDivider,
       VForm, VTextField, VSelect, VSpacer,
-      VIcon
+      VIcon, Notif
     },
 
     data () {
@@ -99,21 +122,61 @@
         dialog: false,
         valid: true,
         dataMapel: {
-          id_jurusan: '',
-          id_kelas: '',
-          nama: '',
-          kkm: ''
+          major_id: '',
+          group_id: '',
+          school_id: '',
+          name: '',
+          score: '',
+          id: ''
         },
+        mask: '##',
         items: ['foo', 'bar', 'zee'],
-        requiredRule: [v => !!v || 'Data harus diisi']
+        requiredRule: [v => !!v || 'Data harus diisi'],
+        msg: {
+          success: 'Data berhasil diubah',
+          error: 'Data tidak gagal diubah',
+          visible: false
+        }
+      }
+    },
+
+    computed: {
+      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status']),
+      detailKelas: {
+        get() {
+          return this.dataJurusan.filter(kelas => kelas.major.id === this.data.major.id)
+        },
+        set(val) {
+          this.dataJurusan.filter(kelas => kelas.major.id === val)
+        }
+      }
+    },
+
+    watch: {
+      'data.major.id': function (val) {
+        this.detailKelas = val
       }
     },
 
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          console.log(this.dataMapel)
+          // console.log(this.dataMapel)
+          var school = JSON.parse(window.localStorage.getItem('data_sekolah'))
+          this.dataMapel.id = this.data.id
+          this.dataMapel.major_id = this.data.major.id
+          this.dataMapel.group_id = this.data.group.id
+          this.dataMapel.school_id = school.id
+          this.dataMapel.name = this.data.name
+          this.dataMapel.score = this.data.score
+
+          this.$store.dispatch('dataMaster/putDataMapel', this.dataMapel)
+          this.$store.dispatch('dataMaster/updateIsLoading', true)
+          this.msg.visible = true
         }
+      },
+      visible (val) {
+        this.msg.visible = val
       }
     }
   }

@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import dataMaster from './master'
+import dataTes from './tes'
+import dataSiswa from './siswa'
+import dataSoal from './soal'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -18,5 +23,9 @@ export default new Vuex.Store({
     }
   },
   modules: {
+    dataSoal: dataSoal,
+    dataSiswa: dataSiswa,
+    dataTes: dataTes,
+    dataMaster: dataMaster
   }
 })

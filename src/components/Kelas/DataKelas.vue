@@ -1,35 +1,39 @@
 <template>
-	<v-data-table
-		:headers="header"
-		:search="search"
-		:items="dataKelas"
-		:items-per-page="10">
-		<template v-slot:top>
-			<div>
-				<div class="d-flex">
-					<v-spacer></v-spacer>					
+	<div>
+		<Loader type="table" v-if="isLoading" />
+		<v-data-table
+			v-else
+			:headers="header"
+			:search="search"
+			:items="dataKelas"
+			:items-per-page="10">
+			<template v-slot:top>
+				<div>
+					<div class="d-flex">
+						<v-spacer></v-spacer>					
+					</div>
+					<v-text-field
+		        v-model="search"
+		        prepend-icon="mdi-magnify"
+		        label="Cari Kelas"
+		        single-line
+		        autocomplete="off"
+		        hide-details
+		      ></v-text-field>
 				</div>
-				<v-text-field
-	        v-model="search"
-	        prepend-icon="mdi-magnify"
-	        label="Cari Kelas"
-	        single-line
-	        autocomplete="off"
-	        hide-details
-	      ></v-text-field>
-			</div>
-		</template>
-		<template v-slot:no-result>
-      <v-alert type="info" class="mt-4">
-        <div>Data tidak ditemukan</div>
-      </v-alert>
-    </template>
-		<template v-slot:item.action="{item}">
-			<div class="d-flex">
-				<EditKelas :detail="detailKelas(item.id)"/>
-			</div>
-		</template>
-	</v-data-table>
+			</template>
+			<template v-slot:no-result>
+	      <v-alert type="info" class="mt-4">
+	        <div>Data tidak ditemukan</div>
+	      </v-alert>
+	    </template>
+			<template v-slot:item.action="{item}">
+				<div class="d-flex">
+					<EditKelas :detail="detailKelas(item.id)"/>
+				</div>
+			</template>
+		</v-data-table>
+	</div>
 </template>
 
 <script>
@@ -39,12 +43,14 @@
 		VSpacer
 	} from 'vuetify/lib'
 	import EditKelas from '@/components/Kelas/EditKelas'
+	import Loader from '@/components/Loader'
 
 	export default {
 		components: {
 			VDataTable, VAlert,
 			VSpacer,
-			EditKelas
+			EditKelas, 
+			Loader
 		},
 
 		data: () => ({
@@ -63,7 +69,7 @@
 			],
 			dataKelas: [],
 			search: '',
-			isLoading: false
+			isLoading: true
 		}),
 
 		methods: {

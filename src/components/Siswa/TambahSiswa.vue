@@ -5,12 +5,9 @@
       width="500"
       persistent>
       <template v-slot:activator="{ on }">
-        <v-btn
-          depressed
-          color="primary"
-          v-on="on">
+        <v-btn depressed color="primary" v-on="on">
           <v-icon class="mr-3">mdi-plus</v-icon>
-          tambah siswa
+          tambah data
         </v-btn>
       </template>
 
@@ -20,32 +17,67 @@
         </div>
         <v-card-text class="pa-6 pb-0">
           <v-form v-model="valid" ref="form">
-            <v-select
-              :items="items"
-              v-model="dataSiswa.id_jurusan"
-              label="Jurusan"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select>
-            <v-select
-              :items="items"
-              v-model="dataSiswa.id_kelas"
-              label="Kelas"
-              :disabled="dataSiswa.id_jurusan === ''?true:false"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select>
             <v-text-field
-              v-model="dataSiswa.nama"
+              v-model="dataSiswa.nisn"
+              counter
+              v-mask="maskNisn"
+              label="NISN"
+              outlined
+              dense
+              :rules="requiredRule"
+              autocomplete="off"
+            ></v-text-field>
+            <v-text-field
+              v-model="dataSiswa.name"
               label="Nama siswa"
               outlined
               dense
               :rules="requiredRule"
               autocomplete="off"
             ></v-text-field>
+            <!-- <v-text-field
+              v-model="dataSiswa.password"
+              label="Password"
+              outlined
+              dense
+              :rules="requiredRule"
+              autocomplete="off"
+            ></v-text-field> -->
+            <v-select
+              :items="dataJurusan"
+              item-text="major.name"              
+              return-object
+              v-model="jurusan"
+              label="Jurusan"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select>
+            <v-select
+              :items="detailKelas"
+              item-text="group.name"
+              return-object
+              v-model="kelas"
+              :disabled="jurusan === ''?true:false"
+              label="Kelas"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select>
+            <v-select
+              :items="detailRuang"
+              item-text="name"
+              item-value="id"              
+              v-model="dataSiswa.room_id"
+              label="Ruang kelas"
+              :disabled="kelas === ''?true:false"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select>
           </v-form>
+
+          <Notif :msg="msg" :status="status" @visible="visible" />
         </v-card-text>
 
         <v-divider></v-divider>
@@ -61,6 +93,7 @@
           <v-btn
             :disabled="!valid"
             color="primary"
+            :loading="isLoading"
             @click.prevent="validate"
             type="submit"
             depressed>
@@ -80,14 +113,21 @@
     VForm, VTextField, VSelect, VSpacer,
     VIcon
   } from 'vuetify/lib'
+  import { mapState } from 'vuex'
+  import { mask } from 'vue-the-mask'
+  import Notif from '@/components/Notif'
 
   export default {
+    directives: {
+      mask
+    },
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
       VBtn, VDivider,
       VForm, VTextField, VSelect, VSpacer,
-      VIcon
+      VIcon, Notif
     },
 
     data () {
@@ -95,20 +135,63 @@
         dialog: false,
         valid: true,
         dataSiswa: {
-          id_jurusan: '',
-          id_kelas: '',
-          nama: ''
+          major_id: '',
+          group_id: '',
+          name: '',
+          nisn: '',
+          password: '',
+          room_id: ''
         },
-        items: ['foo', 'bar', 'zee'],
-        requiredRule: [v => !!v || 'Data harus diisi']
+        maskNisn: '##########',
+        requiredRule: [v => !!v || 'Data harus diisi'],
+        detailKelas: [],
+        detailRuang: [],
+        jurusan: '',
+        kelas: '',
+        msg: {
+          success: 'Data berhasil diubah',
+          error: 'Data gagal diubah',
+          visible: false
+        }
+      }
+    },
+
+    computed: {
+      ...mapState('dataMaster', ['dataJurusan', 'dataRuang']),
+      ...mapState('dataSiswa', ['status', 'isLoading'])
+    },
+
+    watch: {
+      jurusan (val) {
+        this.detailKelas = this.dataJurusan.filter(jurusan => jurusan.major.name === val.major.name)
+      },
+      kelas (val) {
+        this.detailRuang = this.dataRuang.filter(ruang => ruang.master_id === val.id)
       }
     },
 
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          console.log(this.dataSiswa)
+          this.dataSiswa.password = this.generateText(6)
+          this.dataSiswa.major_id = this.dataSiswa.major_id.major.id
+          this.$store.dispatch('dataSiswa/putDataSiswa', this.dataSiswa)
+          this.$store.dispatch('dataSiswa/updateIsLoading', true)
+          this.msg.visible = true
         }
+      },
+      visible (val) {
+        this.msg.visible = val
+      },
+      generateText(len) {
+        let text = "";
+        let chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+        for (let i = 0; i < len; i++) {
+          text += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        return text;
       }
     }
   }

@@ -2,9 +2,14 @@
   <v-navigation-drawer app :permanent="permanent">
   	<div class="d-flex justify-center my-3">
   		<div class="text-center">
-  			<v-avatar size="100">
-		  		<img :src="require('@/assets/profil.jpg')" alt="profile" />
-		  	</v-avatar>
+  			<div class="container-absolute">
+          <v-avatar size="100">
+            <img :src="require('@/assets/se.png')" alt="profile" />
+          </v-avatar>
+          <!-- <v-btn fab small class="btn-camera se-primary white--text">
+            <v-icon>mdi-camera</v-icon>
+          </v-btn>   --> 
+        </div>
 		  	<div class="title mt-3">
 		  		{{ name }}
 		  	</div>
@@ -73,12 +78,23 @@
   </v-navigation-drawer>	
 </template>
 
+<style scoped>
+  .container-absolute{
+    position: relative;
+  }
+  .btn-camera{
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+  }
+</style>
+
 <script>
 	import { 
 		VNavigationDrawer,
 		VList, VListItem, VListItemIcon, 
 		VListItemContent, VListItemTitle, VListItemGroup,
-		VAvatar, VListGroup
+		VAvatar, VBtn, VIcon, VListGroup
 	} from 'vuetify/lib'
 
 	export default {
@@ -88,16 +104,18 @@
 			VNavigationDrawer,
 			VList, VListItem, VListItemIcon, VListItemContent, 
 			VListItemTitle, VListItemGroup, VListGroup,
-			VAvatar			
+			VAvatar, VBtn, VIcon			
 		},
 
 		data: () => ({
 			list: 0,
 			items: [
         { title: 'Dashboard', icon: 'mdi-view-dashboard', link: 'home' },
+        { title: 'Data Sekolah', icon: 'mdi-school', link: 'profil' },
         { title: 'Daftar Siswa', icon: 'mdi-face', link: 'siswa' },
         { title: 'Manage Soal', icon: 'mdi-file', link: 'soal' },
-        { title: 'Manage Tes', icon: 'mdi-pencil', link: 'tes' }
+        { title: 'Manage Tes', icon: 'mdi-pencil', link: 'tes' },
+        { title: 'Assessment Report', icon: 'mdi-file-document', link: 'nilai' }
       ],
       data: [
         { title: 'Kelas', icon: 'mdi-google-analytics', link: 'kelas' },
@@ -111,8 +129,8 @@
 
     created () {
       var school = JSON.parse(window.localStorage.getItem('data_sekolah'))
-      this.name = school.user_name
-      this.regency = school.user_regency      
+      this.name = school.name
+      this.regency = school.id_kelas      
     },
 
     methods: {

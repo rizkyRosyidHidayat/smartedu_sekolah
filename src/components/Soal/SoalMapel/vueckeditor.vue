@@ -68,10 +68,16 @@
         toolbar: this.toolbar,
         language: this.language,
         height: this.height,
+        // removeButtons: 'Underline,Subscript,Superscript',
         removePlugins: 'image',
-        extraPlugins: 'easyimage,eqneditor,language'
+        extraPlugins: 'eqneditor,language,justify,font,filebrowser,image2,widget',
+        filebrowserUploadUrl: 'https://app.smart-edu.id/upload.php',
+        filebrowserUploadMethod: 'form',
+        // imageUploadURL: 'https://api.app.smart-edu.id/api/school/soal/file/upload',
+        // dataParser: function (data) {
+        //   console.log(data)
+        // }
       };
-
       CKEDITOR.replace(id, config);
       CKEDITOR.instances[id].setData(this.value);
       CKEDITOR.instances[id].on('change', () => {

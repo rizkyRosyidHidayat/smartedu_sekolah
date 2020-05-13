@@ -14,7 +14,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="dialog = false">kembali</v-btn>
-        <v-btn @click="hapusData" color="primary">hapus</v-btn>
+        <v-btn @click="hapusData" :loading="isLoading" color="primary">hapus</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -28,8 +28,11 @@
     VSpacer,
     VIcon
   } from 'vuetify/lib'
+  import {mapState} from 'vuex'
 
   export default {
+    props: ['id', 'idMapel'],
+
     components: {
       VDialog, VCard,
       VCardText, VCardActions,
@@ -44,8 +47,16 @@
 
     methods: {
       hapusData () {
-        console.log('kk')
+        this.$store.dispatch('dataSoal/deleteDataSoal', {
+          id_soal: this.id,
+          id_mapel: this.idMapel
+        })
+        this.$store.dispatch('dataSoal/updateIsLoading', true)
       }
+    },
+
+    computed: {
+      ...mapState('dataSoal', ['isLoading'])
     }
   }
 </script>

@@ -42,12 +42,14 @@ function generateText(len) {
 }
 
 export function dataRuang(sheet) {
+	var school = JSON.parse(window.localStorage.getItem('data_sekolah'))
 	var dataRuang = {
 		data: {
 			room: [],
 			group: [],
 			major: [],
-			participant: []
+			participant: [],
+			school_id: school.id
 		}
 	}
 	sheet.map(sheet => {		
@@ -76,6 +78,6 @@ export function dataRuang(sheet) {
 		})		
 	})
 
-	console.log(JSON.stringify(dataRuang))	
+	// console.log(JSON.stringify(dataRuang))	
 	return dataRuang	
 }

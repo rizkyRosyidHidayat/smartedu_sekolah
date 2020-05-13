@@ -1,50 +1,65 @@
 <template>
-	<v-data-table
-		:headers="header"
-		:search="search"
-		:items="dataSiswa"
-		:items-per-page="10">
-		<template v-slot:item.room="{ item }">
-      {{ item.group }} {{ namaJurusan(item.major) }} {{ item.room }}
-    </template>
-		<template v-slot:no-data>
-			<v-alert type="info" class="mt-4 text-left">
-				Silahkan pilih jurusan dan kelas untuk menampilkan
-				daftar siswa
-			</v-alert>
-		</template>
-		<template v-slot:top>
-			<div>
-				<div class="d-flex">
-					<v-spacer></v-spacer>
-					<TambahSiswa/>
+	<div>
+		<Loader type="table" v-if="isLoading" />
+		<v-data-table
+			v-else
+			:headers="header"
+			:search="search"
+			:items="result"
+			:items-per-page="10">
+			<template v-slot:item.room="{ item }">
+	      {{ item.group.name }} {{ namaJurusan(item.major.name) }} {{ item.room.name }}
+	    </template>
+			<template v-slot:no-data>
+				<v-alert type="info" class="mt-4 text-left">
+					Silahkan download template untuk dapat mengisi data siswa dan kemudian diupload data siswanya.
+				</v-alert>
+			</template>
+			<template v-slot:top>
+				<div>
+					<div class="d-flex">
+						<v-spacer></v-spacer>
+						<TambahSiswa/>
 
-					<UploadSiswa/>
+						<a
+	            target="_blank"
+	            class="ml-3 decoration-none"
+	            href="https://app.smart-edu.id/sekolah/downloads/TEMPLATE_DATA_PESERTA_USBK.xlsx"
+	          >
+	            <v-btn
+	            	depressed
+	            	color="success">
+	            	download template
+	            </v-btn>
+	          </a>
 
-					<KosongkanSiswa/>					
+						<UploadSiswa/>
+
+						<KosongkanSiswa/>					
+					</div>
+					<v-text-field
+		        v-model="search"
+		        prepend-icon="mdi-magnify"
+		        label="Cari Siswa"
+		        single-line
+		        autocomplete="off"
+		        hide-details
+		      ></v-text-field>
 				</div>
-				<v-text-field
-	        v-model="search"
-	        prepend-icon="mdi-magnify"
-	        label="Cari Siswa"
-	        single-line
-	        autocomplete="off"
-	        hide-details
-	      ></v-text-field>
-			</div>
-		</template>
-		<template v-slot:no-result>
-      <v-alert type="info" class="mt-4">
-        <div>Data tidak ditemukan</div>
-      </v-alert>
-    </template>
-		<template v-slot:item.action="{item}">
-			<div class="d-flex">
-				<EditSiswa/>
-				<HapusSiswa/>
-			</div>
-		</template>
-	</v-data-table>
+			</template>
+			<template v-slot:no-result>
+	      <v-alert type="info" class="mt-4">
+	        <div>Data tidak ditemukan</div>
+	      </v-alert>
+	    </template>
+			<template v-slot:item.action="{item}">
+				<div class="d-flex">
+					<EditSiswa :data="item" />
+					<HapusSiswa :id="item.id" />
+				</div>
+			</template>
+		</v-data-table>
+	</div>
 </template>
 
 <script>
@@ -57,10 +72,13 @@
 	import KosongkanSiswa from '@/components/Siswa/KosongkanSiswa'
 	import EditSiswa from '@/components/Siswa/EditSiswa'
 	import HapusSiswa from '@/components/Siswa/HapusSiswa'
+	import Loader from '@/components/Loader.vue'
 
-	import { getDataSiswa } from '@/config/siswa'
+	import { mapState } from 'vuex'
 
 	export default {
+		props: ['hasilFilter'],
+
 		components: {
 			VDataTable, VAlert,
 			VSpacer,
@@ -69,6 +87,7 @@
 			KosongkanSiswa,
 			UploadSiswa,
 			TambahSiswa,
+			Loader
 		},
 
 		data: () => ({
@@ -80,33 +99,34 @@
 				{ text: 'Ruang Kelas', value: 'room', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			dataSiswa: [],
-			search: '',
-			isLoading: false
+			search: ''
 		}),
 
 		methods: {
 			namaJurusan(jurusan) {
 				var nama = jurusan.split(' ')
-				var singkatan = nama.filter(nama => nama.toLowerCase() !== 'dan')
-					.map(nama => nama[0])
-				return singkatan.join('')
+				if (nama.length === 1) {
+					return nama[0]
+				} else {
+					var singkatan = nama.filter(nama => nama.toLowerCase() !== 'dan')
+						.map(nama => nama[0])
+					return singkatan.join('')
+				}
 			}
 		},
 
 		created () {
-			this.isLoading = true
-			getDataSiswa ()
-				.then(res => {
-					if (res.status === 200) {
-						this.dataSiswa = res.data.data
-						this.isLoading = false
-						// console.log(this.dataSiswa)
-					}
-				})
-				.catch(err => {
-					this.isLoading = false
-				})
+			this.$store.dispatch('dataSiswa/getDataSiswa')
+		},
+
+		computed: {
+			...mapState('dataSiswa', ['dataSiswa', 'status', 'isLoading']),
+			result () {
+				return this.dataSiswa
+					.filter(siswa => siswa.group.name.includes(this.hasilFilter.group))
+	        .filter(siswa => siswa.major.name.includes(this.hasilFilter.major))
+	        .filter(siswa => siswa.room.name.includes(this.hasilFilter.room))
+			}			
 		}
 	}
 </script>
