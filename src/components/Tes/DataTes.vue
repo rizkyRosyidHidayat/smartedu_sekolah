@@ -85,6 +85,7 @@
 			this.$store.dispatch('dataTes/updateIsLoading', true)
       this.$store.dispatch('dataMaster/getDataJurusan')
       this.$store.dispatch('dataMaster/getDataMapel')
+      this.$store.dispatch('dataMaster/getDataKelas')
    //    const token = JSON.parse(window.localStorage.getItem('dataToken'))
 			// let dataToken = null
 			// if (token === null) {

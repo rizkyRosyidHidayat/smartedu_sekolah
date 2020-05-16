@@ -23,22 +23,22 @@
           <v-form v-model="valid" ref="form">
             <v-card-text class="pa-6 pb-0">
               <v-select
-                :items="dataJurusan"
-                item-text="major.name"
-                item-value="major.id"
-                v-model="data.major.id"
-                label="Jurusan"
+                :items="detailKelas"
+                item-text="name"
+                item-value="id"
+                v-model="data.group.id"
+                label="Kelas"
                 outlined
                 dense
                 :rules="requiredRule"              
               ></v-select>
               <v-select
-                :items="detailKelas"
-                item-text="group.name"
-                item-value="group.id"
-                v-model="data.group.id"
-                :disabled="data.major.id === ''?true:false"
-                label="Kelas"
+                :items="detailJurusan"
+                item-text="name"
+                item-value="id"
+                v-model="data.major.id"
+                :disabled="data.group.id === ''?true:false"
+                label="Jurusan"
                 outlined
                 dense
                 :rules="requiredRule"              
@@ -48,7 +48,7 @@
                 item-text="name"
                 item-value="id"
                 v-model="data.subject.id"
-                :disabled="data.group.id === ''?true:false"
+                :disabled="data.major.id === ''?true:false"
                 label="Mata Pelajaran"
                 outlined
                 dense
@@ -227,13 +227,21 @@
 
     computed: {
       ...mapState('dataTes', ['status', 'isLoading']),
-      ...mapState('dataMaster', ['dataJurusan', 'dataMapel']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas']),
       detailKelas: {
         get() {
-          return this.dataJurusan.filter(jurusan => jurusan.major.id === this.data.major.id)
+          return this.dataKelas
         },
         set(val) {
-          this.dataJurusan.filter(jurusan => jurusan.major.id === val)
+          this.dataKelas.filter(kelas => kelas.id === val)
+        }
+      },
+      detailJurusan: {
+        get() {
+          return this.dataJurusan
+        },
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === val)
         }
       },
       detailMapel: {
@@ -258,14 +266,14 @@
       }
     },
 
-    watch: {
-      'data.major.id': function (val) {
-        this.detailKelas = val
-      },
-      'data.group.id': function (val) {
-        this.detailMapel = val
-      }
-    },
+    // watch: {
+    //   'data.major.id': function (val) {
+    //     this.detailKelas = val
+    //   },
+    //   'data.group.id': function (val) {
+    //     this.detailMapel = val
+    //   }
+    // },
 
     methods: {
       validate () {
