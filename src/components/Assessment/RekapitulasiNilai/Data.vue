@@ -14,9 +14,12 @@
 		<v-data-table
 			:headers="header"
 			:search="search"
-			:items="dataJurusan"
+			:items="dataResult"
 			:items-per-page="10">
-			<template v-slot:no-result>
+      <template v-slot:item.no="{item}">
+        {{dataResult.map(x => x.user_nisn).indexOf(item.user_nisn)+1}}
+      </template>
+			<template v-slot:no-data>
 	      <v-alert type="info" class="mt-4">
 	        <div>Data tidak ditemukan</div>
 	      </v-alert>
@@ -26,6 +29,7 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import {
 		VDataTable, VAlert,
 		VSpacer, VToolbar, VToolbarTitle,
@@ -41,20 +45,19 @@
 
 		data: () => ({
 			header: [
-				// { text: 'No', value: 'no', sortable: false },
-				{ text: 'Jurusan', value: 'major', sortable: false },
-				{ text: 'Kelas', value: 'group', sortable: false },
+				{ text: 'No', value: 'no', sortable: false },
+				{ text: 'NISN', value: 'user_nisn', sortable: false },
+				{ text: 'Nama', value: 'user_name', sortable: false },
+				{ text: 'Nilai', value: 'exam_score', sortable: false },
 			],
-			dataJurusan: [],
-			search: '',
-			isLoading: false,
-			dataKelas: []
+			search: ''
 		}),
 
 		methods: {
 		},
 
-		created () {
+		computed: {
+			...mapState('dataResult', ['dataResult', 'isLoading'])
 		}
 	}
 </script>

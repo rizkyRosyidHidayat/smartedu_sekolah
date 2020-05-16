@@ -49,7 +49,7 @@
 	</v-card>
 </template>
 
-<script>
+<script>	
 	import { 
 		VCard, VCardText,
 		VIcon, VBtn, VDivider
@@ -59,6 +59,10 @@
 		components: {
 			VCard, VCardText,
 			VIcon, VBtn, VDivider
+		},
+		created() {
+			this.$store.dispatch('dataResult/getDataResult')
+			this.$store.dispatch('dataResult/updateIsLoading', true)
 		}
 	}
 </script>

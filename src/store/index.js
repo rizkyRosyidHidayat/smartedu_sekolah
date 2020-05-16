@@ -5,6 +5,7 @@ import dataMaster from './master'
 import dataTes from './tes'
 import dataSiswa from './siswa'
 import dataSoal from './soal'
+import dataResult from './result'
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     }
   },
   modules: {
+    dataResult: dataResult,
     dataSoal: dataSoal,
     dataSiswa: dataSiswa,
     dataTes: dataTes,
