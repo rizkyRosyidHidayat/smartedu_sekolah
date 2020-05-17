@@ -22,7 +22,7 @@
           ></v-text-field>
         </div>
       </template>
-      <template v-slot:no-result>
+      <template v-slot:no-data>
         <v-alert type="info" class="mt-4">
           <div>Data tidak ditemukan</div>
         </v-alert>

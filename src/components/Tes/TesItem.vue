@@ -9,7 +9,6 @@
 			<HapusTes :id="data.id" />
 		</div>
 		<v-card-text>
-			{{data.id}}
 			<table>
 				<tbody>
 					<tr>

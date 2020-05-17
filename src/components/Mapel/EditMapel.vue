@@ -18,8 +18,8 @@
           <v-card-text class="pa-6 pb-0">
             <v-select
               :items="dataJurusan"
-              item-text="major.name"
-              item-value="major.id"
+              item-text="name"
+              item-value="id"
               v-model="data.major.id"
               label="Jurusan"
               outlined
@@ -27,11 +27,10 @@
               :rules="requiredRule"              
             ></v-select>
             <v-select
-              :items="detailKelas"
-              item-text="group.name"
-              item-value="group.id"
+              :items="dataKelas"
+              item-text="name"
+              item-value="id"
               v-model="data.group.id"
-              :disabled="data.major.id === ''?true:false"
               label="Kelas"
               outlined
               dense
@@ -141,21 +140,7 @@
     },
 
     computed: {
-      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status']),
-      detailKelas: {
-        get() {
-          return this.dataJurusan.filter(kelas => kelas.major.id === this.data.major.id)
-        },
-        set(val) {
-          this.dataJurusan.filter(kelas => kelas.major.id === val)
-        }
-      }
-    },
-
-    watch: {
-      'data.major.id': function (val) {
-        this.detailKelas = val
-      }
+      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status', 'dataKelas'])
     },
 
     methods: {

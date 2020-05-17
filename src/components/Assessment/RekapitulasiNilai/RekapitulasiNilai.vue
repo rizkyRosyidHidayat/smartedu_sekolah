@@ -21,8 +21,7 @@
 						:items="dataKelas"
 						item-text="name"
 						item-value="id"
-						return-object
-						v-model="kelas"
+						v-model="hasilFilter.group_id"
 						label="Kelas"
 						required
 						:rules="requiredRule"
@@ -32,12 +31,10 @@
 				</v-col>
 				<v-col sm="12" class="py-0">
 					<v-select
-						:items="detailJurusan"
-						item-text="major.name"
-						item-value="major.id"
-						return-object
-						:disabled="kelas === ''?true:false"
-						v-model="jurusan"
+						:items="dataJurusan"
+						item-text="name"
+						item-value="id"
+						v-model="hasilFilter.major_id"
 						label="Jurusan"
 						required
 						:rules="requiredRule"
@@ -52,7 +49,7 @@
 						item-value="id"
 						v-model="hasilFilter.room_id"
 						label="Ruang kelas"
-						:disabled="kelas === ''?true:false"
+						:disabled="hasilFilter.major_id === ''?true:false"
 						required
 						:rules="requiredRule"
 						outlined
@@ -121,10 +118,6 @@
 		},
 
 		data: () => ({
-			jurusan: '',
-			kelas: '',
-			ruang: '',
-			detailJurusan: [],
 			detailRuang: [],
 			hasilFilter: {
 				group_id: '',
@@ -144,13 +137,8 @@
 		},
 
 		watch: {
-			kelas (val) {
-				this.detailJurusan = this.dataJurusan.filter(jurusan => jurusan.group.id === val.id)
-				this.hasilFilter.group_id = val.id
-			},
-			jurusan (val) {
-				this.detailRuang = this.dataRuang.filter(ruang => ruang.group.id === val.group.id && ruang.major.id === val.major.id)
-				this.hasilFilter.major_id = val.major.id
+			'hasilFilter.major_id': function (val) {
+				this.detailRuang = this.dataRuang.filter(ruang => ruang.group.id === this.hasilFilter.group_id && ruang.major.id === val)				
 			}
 		},
 

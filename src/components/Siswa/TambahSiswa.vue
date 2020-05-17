@@ -45,20 +45,19 @@
             ></v-text-field> -->
             <v-select
               :items="dataJurusan"
-              item-text="major.name"              
-              return-object
-              v-model="jurusan"
+              item-text="name"              
+              item-value="id"              
+              v-model="dataSiswa.major_id"
               label="Jurusan"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
             <v-select
-              :items="detailKelas"
-              item-text="group.name"
-              return-object
-              v-model="kelas"
-              :disabled="jurusan === ''?true:false"
+              :items="dataKelas"
+              item-text="name"
+              item-value="id"
+              v-model="dataSiswa.group_id"
               label="Kelas"
               outlined
               dense
@@ -70,7 +69,7 @@
               item-value="id"              
               v-model="dataSiswa.room_id"
               label="Ruang kelas"
-              :disabled="kelas === ''?true:false"
+              :disabled="dataSiswa.group_id === ''?true:false"
               outlined
               dense
               :rules="requiredRule"              
@@ -144,10 +143,7 @@
         },
         maskNisn: '##########',
         requiredRule: [v => !!v || 'Data harus diisi'],
-        detailKelas: [],
         detailRuang: [],
-        jurusan: '',
-        kelas: '',
         msg: {
           success: 'Data berhasil diubah',
           error: 'Data gagal diubah',
@@ -157,16 +153,13 @@
     },
 
     computed: {
-      ...mapState('dataMaster', ['dataJurusan', 'dataRuang']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataRuang', 'dataKelas']),
       ...mapState('dataSiswa', ['status', 'isLoading'])
     },
 
     watch: {
-      jurusan (val) {
-        this.detailKelas = this.dataJurusan.filter(jurusan => jurusan.major.name === val.major.name)
-      },
-      kelas (val) {
-        this.detailRuang = this.dataRuang.filter(ruang => ruang.master_id === val.id)
+      'dataSiswa.group_id': function (val) {
+        this.detailRuang = this.dataRuang.filter(ruang => ruang.group.id === val && ruang.major.id === this.dataSiswa.major_id)
       }
     },
 
@@ -174,7 +167,6 @@
       validate () {
         if (this.$refs.form.validate()) {
           this.dataSiswa.password = this.generateText(6)
-          this.dataSiswa.major_id = this.dataSiswa.major_id.major.id
           this.$store.dispatch('dataSiswa/putDataSiswa', this.dataSiswa)
           this.$store.dispatch('dataSiswa/updateIsLoading', true)
           this.msg.visible = true

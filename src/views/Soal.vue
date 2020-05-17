@@ -10,9 +10,9 @@
 					<v-col cols="12" md="4" sm="12" class="py-0">
 						<v-select
 							:items="dataJurusan"
-							item-text="major.name"
-							return-object
-							v-model="jurusan"
+							item-text="name"
+							item-value="name"
+							v-model="hasilFilter.major"
 							label="Jurusan"
 							outlined
 							dense
@@ -20,12 +20,11 @@
 					</v-col>
 					<v-col cols="12" md="4" sm="12" class="py-0">
 						<v-select
-							:items="detailKelas"
-							item-text="group.name"
-							item-value="group.name"
+							:items="dataKelas"
+							item-text="name"
+							item-value="name"
 							v-model="hasilFilter.group"
 							label="Kelas"
-							:disabled="jurusan === ''?true:false"
 							outlined
 							dense
 						></v-select>
@@ -41,14 +40,14 @@
 								depressed>
 								reset		
 							</v-btn>
-							<v-btn
+							<!-- <v-btn
 								:disabled="!valid"
 								type="submit"
 								@click.prevent="validate"
 								color="primary"
 								depressed>
 								Filter		
-							</v-btn>
+							</v-btn> -->
 						</div>
 					</v-col>
 				</v-row>
@@ -81,9 +80,6 @@
 		data: () => ({
 			valid: true,
 			requiredRule: [v=>!!v || 'Harus diisi'],
-			jurusan: '',
-			kelas: '',
-			detailKelas: [],
 			hasilFilter: {
 				major: '',
 				group: ''
@@ -92,16 +88,11 @@
 
 		created() {
 			this.$store.dispatch('dataMaster/getDataJurusan')
-		},
-
-		watch: {
-			jurusan (val) {
-				this.detailKelas = this.dataJurusan.filter(kelas => kelas.major.name === val.major.name)
-			}
+			this.$store.dispatch('dataMaster/getDataKelas')
 		},
 
 		computed: {
-			...mapState('dataMaster', ['dataJurusan'])
+			...mapState('dataMaster', ['dataJurusan', 'dataKelas'])
 		},
 
 		methods: {

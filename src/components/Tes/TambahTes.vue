@@ -31,20 +31,19 @@
             <v-card-text class="pa-6 pb-0">
               <v-select
                 :items="dataJurusan"
-                item-text="major.name"
-                return-object
-                v-model="jurusan"
+                item-text="name"
+                item-value="id"
+                v-model="dataTes.major_id"
                 label="Jurusan"
                 outlined
                 dense
                 :rules="requiredRule"              
               ></v-select>
               <v-select
-                :items="detailKelas"
-                item-text="group.name"
-                return-object
-                v-model="kelas"
-                :disabled="jurusan === ''?true:false"
+                :items="dataKelas"
+                item-text="name"
+                item-value="id"
+                v-model="dataTes.group_id"
                 label="Kelas"
                 outlined
                 dense
@@ -55,7 +54,7 @@
                 item-text="name"
                 item-value="id"
                 v-model="dataTes.subject_id"
-                :disabled="kelas === ''?true:false"
+                :disabled="dataTes.group_id === ''?true:false"
                 label="Mata Pelajaran"
                 outlined
                 dense
@@ -213,11 +212,8 @@
         maskHari: '##',
         items: ['foo', 'bar', 'zee'],
         requiredRule: [v => !!v || 'Data harus diisi'],
-        detailKelas: [],
         detailMapel: [],
         school_id: 0,
-        jurusan: '',
-        kelas: '',
         msg: {
           success: 'Data berhasil ditambahkan',
           error: 'Data gagal ditambahkan',
@@ -265,7 +261,7 @@
 
     computed: {
       ...mapState('dataTes', ['status', 'isLoading']),
-      ...mapState('dataMaster', ['dataJurusan', 'dataMapel']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas']),
       dateRule () {
         return [
           ...this.requiredRule,
@@ -281,13 +277,8 @@
     },
 
     watch: {
-      jurusan (val) {
-        this.detailKelas = this.dataJurusan.filter(jurusan => jurusan.major.name === val.major.name)
-        this.dataTes.major_id = val.major.id
-      },
-      kelas (val) {
-        this.detailMapel = this.dataMapel.filter(mapel => mapel.group.id === val.group.id && mapel.major.id === val.major.id)
-        this.dataTes.group_id = val.group.id
+      'dataTes.group_id': function (val) {
+        this.detailMapel = this.dataMapel.filter(mapel => mapel.group.id === val && mapel.major.id === this.dataTes.major_id)
       }
     },
 

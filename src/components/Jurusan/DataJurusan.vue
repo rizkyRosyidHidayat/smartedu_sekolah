@@ -5,7 +5,7 @@
 			v-else
 			:headers="header"
 			:search="search"
-			:items="dataJurusan"
+			:items="detailJurusan"
 			:items-per-page="10">
 			<template v-slot:top>
 				<div>
@@ -29,7 +29,7 @@
 	    </template>
 			<template v-slot:item.action="{item}">
 				<div class="d-flex">
-					<EditJurusan :detail="detailJurusan(item.id)" :kelas="dataKelas" />
+					<EditJurusan :data="item"/>
 				</div>
 			</template>
 		</v-data-table>
@@ -42,8 +42,8 @@
 		VSpacer
 	} from 'vuetify/lib'
 	import EditJurusan from '@/components/Jurusan/EditJurusan'
-	import { getDataJurusan } from '@/config/jurusan'
-  import { getDataKelas } from '@/config/kelas'
+	import { mapState } from 'vuex'
+	import { uniqBy } from 'lodash'
 	import Loader from '@/components/Loader'
 
 	export default {
@@ -61,39 +61,20 @@
 				{ text: 'Kelas', value: 'group.name', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			dataJurusan: [],
 			search: '',
-			isLoading: true,
-			dataKelas: []
 		}),
-
-		methods: {
-			detailJurusan (id) {
-				var hasil = this.dataJurusan.filter(jurusan => jurusan.id === id)
-				return {...hasil[0]}
-			}
+		
+		created () {			
+      this.$store.dispatch('dataMaster/getDataJurusan')
+      this.$store.dispatch('dataMaster/getDataRuang')
+			this.$store.dispatch('dataMaster/updateIsLoading', true)
 		},
 
-		created () {
-			this.isLoading = true
-			getDataJurusan ()
-				.then(res => {
-					if (res.status === 200) {
-						this.dataJurusan = res.data.data
-						this.isLoading = false
-						// console.log(this.dataJurusan)
-					}
-				})
-				.catch(err => {
-					this.isLoading = false
-				})
-
-			getDataKelas()
-        .then(res => {
-          if (res.status === 200) {
-            this.dataKelas = res.data.data
-          }
-        })
+		computed: {
+			...mapState('dataMaster', ['dataJurusan', 'dataRuang', 'isLoading']),
+			detailJurusan() {
+				return uniqBy(this.dataRuang, 'major.id')
+			}
 		}
 	}
 </script>

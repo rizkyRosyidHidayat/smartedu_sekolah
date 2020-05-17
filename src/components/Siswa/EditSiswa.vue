@@ -41,9 +41,9 @@
                 autocomplete="off"
               ></v-text-field>
               <v-select
-                :items="dataJurusan"
-                item-text="major.name"
-                item-value="major.id"
+                :items="detailJurusan"
+                item-text="name"
+                item-value="id"
                 v-model="data.major.id"
                 label="Jurusan"
                 outlined
@@ -52,10 +52,9 @@
               ></v-select>
               <v-select
                 :items="detailKelas"
-                item-text="group.name"
-                item-value="group.id"
+                item-text="name"
+                item-value="id"
                 v-model="data.group.id"
-                :disabled="data.major.id === ''?true:false"
                 label="Kelas"
                 outlined
                 dense
@@ -146,14 +145,22 @@
     },
 
     computed: {
-      ...mapState('dataMaster', ['dataJurusan', 'dataRuang']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataRuang', 'dataKelas']),
       ...mapState('dataSiswa', ['status', 'isLoading']),
-      detailKelas: {
+      detailJurusan: {
         get: function () {
-          return this.dataJurusan.filter(kelas => kelas.major.id === this.data.major.id)
+          return this.dataJurusan
         },
         set: function (val) {
-          this.dataJurusan.filter(kelas => kelas.major.id === val)
+          this.dataJurusan.filter(jurusan => jurusan.id === val)
+        }
+      },
+      detailKelas: {
+        get: function () {
+          return this.dataKelas
+        },
+        set: function (val) {
+          this.dataKelas.filter(kelas => kelas.id === val)
         }
       },
       detailRuang: {
@@ -161,17 +168,8 @@
           return this.dataRuang.filter(ruang => ruang.group.id === this.data.group.id && ruang.major.id === this.data.major.id)
         },
         set: function (val) {
-          this.dataRuang.filter(ruang => ruang.group.id === val && ruang.major.id === this.data.major.id)
+          this.dataRuang.filter(ruang => ruang.id === val)
         }
-      }
-    },
-
-    watch: {
-      'data.major.id': function (val) {
-        this.detailKelas = val
-      },
-      'data.group.id': function (val) {
-        this.detailRuang = val
       }
     },
 

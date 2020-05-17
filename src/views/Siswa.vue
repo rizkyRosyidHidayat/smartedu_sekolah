@@ -10,9 +10,9 @@
 					<v-col cols="12" md="3" sm="3" class="py-0">
 						<v-select
 							:items="dataJurusan"
-							item-text="major.name"
-							return-object
-							v-model="jurusan"
+							item-text="name"
+							item-value="name"
+							v-model="hasilFilter.major"
 							label="Jurusan"
 							outlined
 							dense
@@ -20,11 +20,10 @@
 					</v-col>
 					<v-col cols="12" md="3" sm="3" class="py-0">
 						<v-select
-							:items="detailKelas"
-							item-text="group.name"
-							return-object
-							v-model="kelas"
-							:disabled="jurusan === ''?true:false"
+							:items="dataKelas"
+							item-text="name"
+							item-value="name"
+							v-model="hasilFilter.group"
 							label="Kelas"
 							outlined
 							dense
@@ -35,9 +34,9 @@
 							:items="detailRuang"
 							item-text="name"
 							item-value="name"
-							v-model="ruang"
+							v-model="hasilFilter.room"
 							label="Ruang kelas"
-							:disabled="kelas === ''?true:false"
+							:disabled="hasilFilter.group === ''?true:false"
 							outlined
 							dense
 						></v-select>
@@ -53,14 +52,14 @@
 								depressed>
 								reset		
 							</v-btn>
-							<v-btn
+							<!-- <v-btn
 								:disabled="!valid"
 								@click.prevent="validate"
 								type="submit"
 								color="primary"
 								depressed>
 								Filter		
-							</v-btn>
+							</v-btn> -->
 						</div>
 					</v-col>
 				</v-row>
@@ -91,10 +90,6 @@
 		},
 
 		data: () => ({
-			jurusan: '',
-			kelas: '',
-			ruang: '',
-			detailKelas: [],
 			detailRuang: [],
 			hasilFilter: {
 				group: '',
@@ -108,38 +103,29 @@
 		created() {
 			this.$store.dispatch('dataMaster/getDataJurusan')
 			this.$store.dispatch('dataMaster/getDataRuang')
+			this.$store.dispatch('dataMaster/getDataKelas')
 			this.$store.dispatch('dataSiswa/updateIsLoading', true)
 		},
 
 		watch: {
-			jurusan (val) {
-				this.detailKelas = this.dataJurusan.filter(jurusan => jurusan.major.name === val.major.name)				
-			},
-			kelas (val) {
-				this.detailRuang = this.dataRuang.filter(ruang => ruang.master_id === val.id)
+			'hasilFilter.group': function (val) {
+				this.detailRuang = this.dataRuang.filter(ruang => ruang.group.name === val && ruang.major.name === this.hasilFilter.major)
 			}
 		},
 
 		computed: {
-			...mapState('dataMaster', ['dataJurusan', 'dataRuang']),
+			...mapState('dataMaster', ['dataJurusan', 'dataRuang', 'dataKelas']),
 			...mapState('dataSiswa', ['isLoading']),
 		},
 
 		methods: {
 			validate () {
 				if (this.$refs.form.validate()) {
-					this.hasilFilter = {
-						group: this.kelas.group.name,
-						major: this.jurusan.major.name,
-						room: this.ruang
-					}
+					this.hasilFilter
 				}
 			},
 			reset () {
-				if (this.$refs.form.validate()) {
-					this.jurusan = ''				        
-					this.kelas = ''				        
-					this.ruang = ''				        
+				if (this.$refs.form.validate()) {		        
 					this.hasilFilter.group = ''				
 					this.hasilFilter.major = ''				
 					this.hasilFilter.room = ''				

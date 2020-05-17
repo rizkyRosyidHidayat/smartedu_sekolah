@@ -16,18 +16,8 @@
         </div>
         <v-card-text class="pa-6 pb-0">
           <v-form v-model="valid" ref="form">
-            <v-select
-              :items="kelas"
-              item-text="name"
-              item-value="id"
-              v-model="detailJurusan.group_id"
-              label="Kelas"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select> 
             <v-text-field
-              v-model="detail.major"
+              v-model="data.major.nama"
               label="Nama Jurusan"
               outlined
               dense
@@ -71,7 +61,7 @@
   } from 'vuetify/lib'
 
   export default {
-    props: ['detail', 'kelas'],
+    props: ['data'],
 
     components: {
       VDialog, VCard,
@@ -85,11 +75,10 @@
       return {
         dialog: false,
         valid: true,
-        detailJurusan: {
-          group_id: '',
+        dataJurusan: {
+          // group_id: '',
           name: ''
         },
-        dataKelas: [],
         requiredRule: [v => !!v || 'Data harus diisi']
       }
     },
@@ -97,17 +86,9 @@
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          this.detailJurusan.name = this.detail.major
-          console.log(this.detailJurusan)
+          this.dataJurusan.name = this.data.major.name
         }
       }
-    },
-
-    created () {      
-      var kelas = this.kelas
-        .filter(kelas => kelas.name === this.detail.group.toString())
-      this.detailJurusan.group_id = {...kelas[0]}.id
-      // console.log(this.detail.group)
-    },
+    }
   }
 </script>
