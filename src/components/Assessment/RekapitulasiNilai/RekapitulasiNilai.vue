@@ -1,7 +1,7 @@
 <template>
 	<div class="mt-3">
 		<div class="title">Rekapitulasi Nilai berdasarkan</div>
-		<v-form ref="form" v-model="valid">
+		<v-form ref="form" v-model="valid" class="mb-3">
 			<v-row>
 				<v-col sm="12" class="py-0">
 					<v-select
@@ -60,6 +60,14 @@
 					<div class="d-flex">
 						<v-spacer></v-spacer>
 						<v-btn
+							:loading="isLoading"
+							@click="reset"
+							color="error"
+							class="mr-3"
+							depressed>
+							reset		
+						</v-btn>
+						<v-btn
 							:disabled="!valid"
 							:loading="isLoading"
 							@click.prevent="validate"
@@ -75,7 +83,7 @@
 
 		<v-divider></v-divider>
 
-		<div class="my-3">
+		<div class="my-3 d-flex">
 			<v-btn
 				depressed
 				class="mr-3"
@@ -84,14 +92,20 @@
 				<v-icon class="mr-2">mdi-file-export-outline</v-icon>
 				export ke pdf
 			</v-btn>
-			<v-btn
-				depressed
-				class="mr-3"
-				color="orange"
-				dark>
-				<v-icon class="mr-2">mdi-file-excel-outline</v-icon>
-				export ke exel
-			</v-btn>
+			<export-excel
+				:data="dataExcel"
+				:fields="fields"
+				worksheet="Rekapitulasi nilai"
+				name="Rekapitulasi_nilai.xls">
+				<v-btn
+					depressed
+					class="mr-3"
+					color="orange"
+					dark>
+					<v-icon class="mr-2">mdi-file-excel-outline</v-icon>
+					export ke exel
+				</v-btn>
+			</export-excel>
 		</div>
 
 		<v-divider></v-divider>
@@ -125,6 +139,12 @@
 				room_id: '',
 				subject_id: ''
 			},
+			fields: {
+				'Nomor': 'no',
+				'NISN': 'user_nisn',
+				'Nama': 'user_name',
+				'Nilai': 'exam_score'
+			},
 			valid: true,
 			requiredRule: [v => !!v || 'Harus diisi']
 		}),
@@ -144,7 +164,13 @@
 
 		computed: {
 			...mapState('dataMaster', ['dataKelas', 'dataJurusan', 'dataRuang', 'dataMapel']),
-			...mapState('dataResult', ['isLoading'])
+			...mapState('dataResult', ['isLoading', 'dataResult']),
+			dataExcel() {
+				return this.dataResult.map((x, i) => {
+					x.no = i+1
+					return x
+				})
+			}
 		},
 
 		methods: {
@@ -153,6 +179,14 @@
 					this.$store.dispatch('dataResult/getDataResultFilter', this.hasilFilter)
 					this.$store.dispatch('dataResult/updateIsLoading', true)
 				}
+			},
+			reset() {
+				this.$store.dispatch('dataResult/getDataResult')
+				this.$store.dispatch('dataResult/updateIsLoading', true)
+				this.hasilFilter.group_id = ''
+				this.hasilFilter.room_id = ''
+				this.hasilFilter.major_id = ''
+				this.hasilFilter.subject_id = ''
 			}
 		}
 	}

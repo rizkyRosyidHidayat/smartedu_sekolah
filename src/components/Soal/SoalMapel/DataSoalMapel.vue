@@ -12,13 +12,14 @@
           <div class="d-flex">
             <v-spacer></v-spacer>  
             <!-- <UploadSoal/> -->
-            <v-btn 
-              depressed
-              color="primary"
-              @click="$router.push({ name: 'tambah-soal', params: { id: id, name: name } })">
-              <v-icon class="mr-3">mdi-plus</v-icon>
-              tambah soal
-            </v-btn>   
+            <a :href="urlTambah">
+              <v-btn 
+                depressed
+                color="primary">
+                <v-icon class="mr-3">mdi-plus</v-icon>
+                tambah soal
+              </v-btn>
+            </a>   
           </div>
           <v-text-field
             v-model="search"
@@ -86,11 +87,14 @@
       ],
       id: 0,
       name: '',
-      search: ''
+      search: '',
     }),
 
     computed: {
-      ...mapState('dataSoal', ['dataSoal' ,'isLoading'])
+      ...mapState('dataSoal', ['dataSoal' ,'isLoading']),
+      urlTambah() {      
+        return `http://${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+      }
     },
 
     created () {
@@ -98,6 +102,6 @@
       this.name = this.$route.params.name
       this.$store.dispatch('dataSoal/getDataSoal', this.id)
       this.$store.dispatch('dataSoal/updateIsLoading', true)
-    }
+    },
   }
 </script>

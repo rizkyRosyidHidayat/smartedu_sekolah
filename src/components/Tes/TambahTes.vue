@@ -30,16 +30,6 @@
           <v-form v-model="valid" ref="form">
             <v-card-text class="pa-6 pb-0">
               <v-select
-                :items="dataJurusan"
-                item-text="name"
-                item-value="id"
-                v-model="dataTes.major_id"
-                label="Jurusan"
-                outlined
-                dense
-                :rules="requiredRule"              
-              ></v-select>
-              <v-select
                 :items="dataKelas"
                 item-text="name"
                 item-value="id"
@@ -50,11 +40,22 @@
                 :rules="requiredRule"              
               ></v-select>
               <v-select
+                :items="detailJurusan"
+                item-text="major.name"
+                item-value="major.id"
+                v-model="dataTes.major_id"
+                :disabled="dataTes.group_id === ''?true:false"
+                label="Jurusan"
+                outlined
+                dense
+                :rules="requiredRule"              
+              ></v-select>
+              <v-select
                 :items="detailMapel"
                 item-text="name"
                 item-value="id"
                 v-model="dataTes.subject_id"
-                :disabled="dataTes.group_id === ''?true:false"
+                :disabled="dataTes.major_id === ''?true:false"
                 label="Mata Pelajaran"
                 outlined
                 dense
@@ -213,6 +214,7 @@
         items: ['foo', 'bar', 'zee'],
         requiredRule: [v => !!v || 'Data harus diisi'],
         detailMapel: [],
+        detailJurusan: [],
         school_id: 0,
         msg: {
           success: 'Data berhasil ditambahkan',
@@ -261,7 +263,7 @@
 
     computed: {
       ...mapState('dataTes', ['status', 'isLoading']),
-      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas', 'dataRuang']),
       dateRule () {
         return [
           ...this.requiredRule,
@@ -278,7 +280,11 @@
 
     watch: {
       'dataTes.group_id': function (val) {
-        this.detailMapel = this.dataMapel.filter(mapel => mapel.group.id === val && mapel.major.id === this.dataTes.major_id)
+        this.detailJurusan = this.dataRuang
+          .filter(mapel => mapel.group.id === val)
+      },
+      'dataTes.major_id': function (val) {
+        this.detailMapel = this.dataMapel.filter(mapel => mapel.group.id === this.dataTes.group_id && mapel.major.id === val)
       }
     },
 

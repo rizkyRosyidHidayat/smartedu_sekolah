@@ -34,8 +34,8 @@
               ></v-select>
               <v-select
                 :items="detailJurusan"
-                item-text="name"
-                item-value="id"
+                item-text="major.name"
+                item-value="major.id"
                 v-model="data.major.id"
                 :disabled="data.group.id === ''?true:false"
                 label="Jurusan"
@@ -227,7 +227,7 @@
 
     computed: {
       ...mapState('dataTes', ['status', 'isLoading']),
-      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas']),
+      ...mapState('dataMaster', ['dataJurusan', 'dataMapel', 'dataKelas', 'dataRuang']),
       detailKelas: {
         get() {
           return this.dataKelas
@@ -238,7 +238,7 @@
       },
       detailJurusan: {
         get() {
-          return this.dataJurusan
+          return this.dataRuang.filter(ruang => ruang.group.id === this.data.group.id)
         },
         set(val) {
           this.dataJurusan.filter(jurusan => jurusan.id === val)
