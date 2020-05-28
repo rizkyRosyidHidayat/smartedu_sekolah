@@ -130,7 +130,7 @@
 						.then(res => {
 							this.isLoading = false							
 							this.status = true
-							window.location.href="/sekolah"
+							window.location.href="/"
 						})
 						.catch(err => {
 							this.isLoading = false

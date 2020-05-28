@@ -11,10 +11,10 @@
           </v-btn>   --> 
         </div>
 		  	<div class="title mt-3">
-		  		{{ name }}
+		  		SMK NU Kesesi
 		  	</div>
 		  	<div class="subtitle-1">
-		  		{{ regency }}
+		  		Pekalongan
 		  	</div>
   		</div>
   	</div>

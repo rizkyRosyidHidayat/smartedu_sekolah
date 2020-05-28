@@ -8,7 +8,7 @@
         @click.stop="permanent = !permanent"
       ></v-app-bar-nav-icon>
       <v-toolbar-title>
-        SmartEdu
+        SMK NU Kesesi
       </v-toolbar-title>
     </v-app-bar>
 
@@ -19,7 +19,7 @@
     </v-content>    
 
     <v-footer app absolute bottom inset class="py-3" color="grey lighten-2">
-      &copy; {{ new Date().getUTCFullYear() }} SmartEdu. AllRight Reserved
+      &copy; {{ new Date().getUTCFullYear() }} SMK NU Kesesi. AllRight Reserved
     </v-footer>
   </v-app>
 </template>

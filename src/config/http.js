@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store/index'
 
 const http = axios.create({
-	baseURL: 'https://api.app.smart-edu.id/api/school/',
+	baseURL: `${process.env.VUE_APP_API}/api/school/`,
 	headers: {
 		'Authorization': 'bearer '+window.localStorage.getItem('token_sekolah'),
 		// 'Content-Type': 'application/json',

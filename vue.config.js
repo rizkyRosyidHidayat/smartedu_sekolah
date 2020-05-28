@@ -3,7 +3,7 @@ module.exports = {
     'vuetify'
   ],
   lintOnSave: false,
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/sekolah/'
-    : '/'
+  //publicPath: process.env.NODE_ENV === 'production'
+  //  ? '/sekolah/'
+  //  : '/'
 }
