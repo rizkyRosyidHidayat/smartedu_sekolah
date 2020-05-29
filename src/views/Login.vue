@@ -2,10 +2,10 @@
 	<v-app>
 		<v-overlay class="bg-login" :style="`background-image: url(${require('@/assets/bg.jpeg')})`">
 			<v-card light color="white" width="500px">
-				<div class="text-center pt-6">
-					<img src="@/assets/se.png" alt="logo" class="mx-auto" height="60px" />
-				</div>
 				<v-card-title>
+					<div class="text-center" style="width: 100%;">
+						<img src="@/assets/se.png" alt="logo" class="mx-auto" height="60px" />
+					</div>
 					<Header/>
 				</v-card-title>
 				<v-divider></v-divider>
