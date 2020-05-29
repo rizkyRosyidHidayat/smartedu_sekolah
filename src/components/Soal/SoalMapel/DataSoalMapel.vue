@@ -12,14 +12,15 @@
           <div class="d-flex">
             <v-spacer></v-spacer>  
             <!-- <UploadSoal/> -->
-            <a :href="urlTambah">
+            <!-- <a :href="urlTambah"> -->
               <v-btn 
                 depressed
+                @click="$router.push({ name: 'tambah-soal', params: { id: id, name: name } })"
                 color="primary">
                 <v-icon class="mr-3">mdi-plus</v-icon>
                 tambah soal
               </v-btn>
-            </a>   
+            <!-- </a>    -->
           </div>
           <v-text-field
             v-model="search"
@@ -93,7 +94,8 @@
     computed: {
       ...mapState('dataSoal', ['dataSoal' ,'isLoading']),
       urlTambah() {      
-        return `${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        // return `${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        return `https://cbt.smknukesesi.sch.id/tambah-soal/${this.id}/${this.name}`
       }
     },
 

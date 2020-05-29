@@ -21,21 +21,22 @@
         <v-form v-model="valid" ref="form">
           <v-card-text class="pa-6 pb-0">
             <v-select
-              :items="dataJurusan"
-              item-text="name"
-              item-value="id"
-              v-model="dataMapel.major_id"
-              label="Jurusan"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select>
-            <v-select
               :items="dataKelas"
               item-text="name"
               item-value="id"
               v-model="dataMapel.group_id"
               label="Kelas"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select>
+            <v-select
+              :items="detailJurusan"
+              item-text="major.name"
+              item-value="major.id"
+              :disabled="dataMapel.group_id === ''?true:false"
+              v-model="dataMapel.major_id"
+              label="Jurusan"
               outlined
               dense
               :rules="requiredRule"              
@@ -142,7 +143,15 @@
     },
 
     computed: {
-      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status', 'dataKelas'])
+      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status', 'dataKelas', 'dataRuang']),
+      detailJurusan: {
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === this.dataMapel.major_id)
+        },
+        get() {
+          return this.dataRuang.filter(ruang => ruang.group.id === this.dataMapel.group_id)
+        }
+      }
     },
 
     methods: {

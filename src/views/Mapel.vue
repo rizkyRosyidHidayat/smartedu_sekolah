@@ -89,6 +89,7 @@
 		created() {
 			this.$store.dispatch('dataMaster/getDataJurusan')
 			this.$store.dispatch('dataMaster/getDataKelas')
+			this.$store.dispatch('dataMaster/getDataRuang')
 		},
 
 		computed: {
