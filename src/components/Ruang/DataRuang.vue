@@ -32,7 +32,7 @@
 	    </template>
 			<template v-slot:item.action="{item}">
 				<div class="d-flex">
-					<EditRuang :detail="item" />
+					<EditRuang :data="item" />
 				</div>
 			</template>
 		</v-data-table>

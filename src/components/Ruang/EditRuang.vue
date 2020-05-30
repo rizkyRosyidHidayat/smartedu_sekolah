@@ -20,7 +20,7 @@
               :items="detailKelas"
               item-text="name"
               item-value="id"
-              v-model="detail.group.id"
+              v-model="data.group.id"
               label="Kelas"
               outlined
               dense
@@ -30,15 +30,15 @@
               :items="detailJurusan"
               item-text="major.name"
               item-value="major.id"
-              v-model="detail.major.id"
+              v-model="data.major.id"
+              :disabled="data.group.id === ''?true:false"
               label="Jurusan"
-              :disabled="detail.group.id === ''?true:false"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
             <v-text-field
-              v-model="detail.name"
+              v-model="data.name"
               label="Ruang Kelas"
               outlined
               dense
@@ -83,7 +83,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    props: ['detail'],
+    props: ['data'],
 
     components: {
       VDialog, VCard,
@@ -109,27 +109,27 @@
     computed: {
       ...mapState('dataMaster', ['dataRuang', 'dataKelas', 'dataJurusan']),
       detailKelas: {
-        set(val) {
-          this.dataKelas.filter(kelas => kelas.id === this.detail.group.id)
-        },
         get() {
           return this.dataKelas
+        },
+        set(val) {
+          this.dataKelas.filter(kelas => kelas.id === val)
         }
       },
       detailJurusan: {
-        set(val) {
-          this.dataJurusan.filter(ruang => ruang.id === this.detail.major.id)
-        },
         get() {
-          return this.dataRuang.filter(ruang => ruang.group.id === this.detail.group.id)
+          return this.dataRuang.filter(ruang => ruang.group.id === this.data.group.id)
+        },
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === val)
         }
-      }
+      },
     },
 
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          this.detailRuang.name = this.detail.name
+          this.detailRuang.name = this.data.name
           this.detailRuang.group_id = this.detailRuang.group_id.id
           console.log(this.detailRuang)
         }

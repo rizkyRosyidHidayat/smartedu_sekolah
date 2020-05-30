@@ -89,8 +89,8 @@
       ...mapState('dataMaster', ['dataMapel', 'isLoading']),
       result () {
         return this.dataMapel
-          .filter(mapel => mapel.group.name.includes(this.hasilFilter.group))
           .filter(mapel => mapel.major.name.includes(this.hasilFilter.major))
+          .filter(mapel => mapel.group.name.includes(this.hasilFilter.group))
       } 
     }
   }

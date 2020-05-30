@@ -96,11 +96,6 @@
 		},
 
 		methods: {
-			validate () {
-				if (this.$refs.form.validate()) {
-					this.hasilFilter.major = this.jurusan.major.name				
-				}
-			},
 			reset () {
 				if (this.$refs.form.validate()) {
 					this.jurusan = ''				        

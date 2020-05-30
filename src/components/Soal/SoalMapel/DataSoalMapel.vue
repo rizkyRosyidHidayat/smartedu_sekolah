@@ -104,7 +104,6 @@
       this.name = this.$route.params.name
       this.$store.dispatch('dataSoal/getDataSoal', this.id)
       this.$store.dispatch('dataSoal/updateIsLoading', true)
-      console.log(process.env)
     },
   }
 </script>
