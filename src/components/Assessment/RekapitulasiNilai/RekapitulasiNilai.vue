@@ -31,9 +31,10 @@
 				</v-col>
 				<v-col sm="12" class="py-0">
 					<v-select
-						:items="dataJurusan"
-						item-text="name"
-						item-value="id"
+						:items="detailJurusan"
+						item-text="major.name"
+						item-value="major.id"
+						:disabled="hasilFilter.group_id===''?true:false"
 						v-model="hasilFilter.major_id"
 						label="Jurusan"
 						required
@@ -170,7 +171,15 @@
 					x.no = i+1
 					return x
 				})
-			}
+			},
+			detailJurusan: {
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === this.hasilFilter.major_id)
+        },
+        get() {
+          return this.dataRuang.filter(ruang => ruang.group.id === this.hasilFilter.group_id)
+        }
+      }
 		},
 
 		methods: {

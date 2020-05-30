@@ -12,14 +12,15 @@
           <div class="d-flex">
             <v-spacer></v-spacer>  
             <!-- <UploadSoal/> -->
-            <a :href="urlTambah">
+            <!-- <a :href="urlTambah"> -->
               <v-btn 
                 depressed
+                @click="$router.push({ name: 'tambah-soal', params: { id: id, name: name } })"
                 color="primary">
                 <v-icon class="mr-3">mdi-plus</v-icon>
                 tambah soal
               </v-btn>
-            </a>   
+            <!-- </a>    -->
           </div>
           <v-text-field
             v-model="search"
@@ -102,6 +103,7 @@
       this.name = this.$route.params.name
       this.$store.dispatch('dataSoal/getDataSoal', this.id)
       this.$store.dispatch('dataSoal/updateIsLoading', true)
+      console.log(process.env)
     },
   }
 </script>

@@ -1,6 +1,6 @@
 <template>	
 	<v-row dense>
-		<v-col cols="12" md="6" sm="12">
+		<v-col cols="12" md="12" sm="12">
 			<v-btn
 				text block 
 				color="primary">
