@@ -34,6 +34,7 @@
               :items="detailJurusan"
               item-text="major.name"
               item-value="major.id"
+              :disabled="dataMapel.group_id === ''?true:false"
               v-model="dataMapel.major_id"
               label="Jurusan"
               outlined

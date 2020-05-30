@@ -94,7 +94,8 @@
     computed: {
       ...mapState('dataSoal', ['dataSoal' ,'isLoading']),
       urlTambah() {      
-        return `${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        // return `${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        return `https://cbt.smknukesesi.sch.id/tambah-soal/${this.id}/${this.name}`
       }
     },
 
