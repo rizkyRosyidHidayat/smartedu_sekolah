@@ -3,6 +3,7 @@
     <Loader type="table" v-if="isLoading" />
     <v-data-table
       v-else
+      class="tampil-soal"
       :headers="header"
       :search="search"
       :items="dataSoal"
@@ -58,6 +59,10 @@
     </v-data-table>
   </div>
 </template>
+
+<style>
+  .tampil-soal img{ width: 100px !important; }
+</style>
 
 <script>
   import {

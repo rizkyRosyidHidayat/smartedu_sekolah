@@ -17,6 +17,7 @@
   .radius{ border-radius: 3px !important; }
   .tile{ border-radius: 0px !important; }
   .decoration-none{ text-decoration: none !important; }
+  .review-soal img{ width: 200px !important; }
 </style>
 
 <script>

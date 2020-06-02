@@ -5,19 +5,6 @@
 			<v-row>
 				<v-col sm="12" class="py-0">
 					<v-select
-						:items="dataMapel"
-						item-text="name"
-						item-value="id"
-						v-model="hasilFilter.subject_id"
-						label="Mata pelajaran"
-						required
-						:rules="requiredRule"
-						outlined
-						dense
-					></v-select>
-				</v-col>
-				<v-col sm="12" class="py-0">
-					<v-select
 						:items="dataKelas"
 						item-text="name"
 						item-value="id"
@@ -51,6 +38,19 @@
 						v-model="hasilFilter.room_id"
 						label="Ruang kelas"
 						:disabled="hasilFilter.major_id === ''?true:false"
+						required
+						:rules="requiredRule"
+						outlined
+						dense
+					></v-select>
+				</v-col>
+				<v-col sm="12" class="py-0">
+					<v-select
+						:items="dataMapel"
+						item-text="name"
+						item-value="id"
+						v-model="hasilFilter.subject_id"
+						label="Mata pelajaran"
 						required
 						:rules="requiredRule"
 						outlined

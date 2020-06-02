@@ -15,7 +15,7 @@
 					dark>
 					rekapitulasi nilai
 				</v-btn>
-				<v-btn
+				<!-- <v-btn
 					depressed
 					class="mr-3"
 					color="orange"
@@ -41,7 +41,7 @@
 					:outlined="$route.name === 'peringkat'?false:true"
 					dark>
 					peringkat
-				</v-btn>
+				</v-btn> -->
 			</div>
 			<v-divider></v-divider>
 			<router-view></router-view>

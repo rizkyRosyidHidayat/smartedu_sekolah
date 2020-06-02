@@ -19,7 +19,7 @@
     </v-app-bar>
 
     <v-content>
-    	<v-container>
+    	<v-container class="review-soal">
     		<div class="my-6">
 	    		Soal {{ page+1 }}
 	    		<span class="ml-3 font-weight-bold">{{ name }}</span>
