@@ -45,7 +45,7 @@
 					></v-select>
 				</v-col>
 				<v-col sm="12" class="py-0">
-					<v-select
+					<v-autocomplete
 						:items="dataMapel"
 						item-text="name"
 						item-value="id"
@@ -55,7 +55,7 @@
 						:rules="requiredRule"
 						outlined
 						dense
-					></v-select>
+					></v-autocomplete>
 				</v-col>
 				<v-col sm="12" class="py-0">
 					<div class="d-flex">
