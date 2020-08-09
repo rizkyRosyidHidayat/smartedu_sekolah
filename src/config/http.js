@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store/index'
 
 const http = axios.create({
-	baseURL: `https://cbt-api.smknukesesi.sch.id/api/school/`,
+	baseURL: `http://smartedu.fanduprassetia.com/api/school/`,
 	headers: {
 		'Authorization': 'bearer '+window.localStorage.getItem('token_sekolah'),
 		// 'Content-Type': 'application/json',
