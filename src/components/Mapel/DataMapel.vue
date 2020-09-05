@@ -14,23 +14,23 @@
 						<TambahMapel/>				
 					</div>
 					<v-text-field
-		        v-model="search"
-		        prepend-icon="mdi-magnify"
-		        label="Cari Mata Pelajaran"
-		        single-line
-		        autocomplete="off"
-		        hide-details
-		      ></v-text-field>
+						v-model="search"
+						prepend-icon="mdi-magnify"
+						label="Cari Mata Pelajaran"
+						single-line
+						autocomplete="off"
+						hide-details
+					></v-text-field>
 				</div>
 			</template>
 			<template v-slot:no-result>
-	      <v-alert type="info" class="mt-4">
-	        <div>Data tidak ditemukan</div>
-	      </v-alert>
-	    </template>
-      <template v-slot:item.no="{item}">
-        {{result.map(x => x.id).indexOf(item.id)+1}}
-      </template>
+				<v-alert type="info" class="mt-4">
+					<div>Data tidak ditemukan</div>
+				</v-alert>
+			</template>
+			<template v-slot:item.no="{item}">
+				{{result.map(x => x.id).indexOf(item.id)+1}}
+			</template>
 			<template v-slot:item.action="{item}">
 				<div class="d-flex">
 					<EditMapel :data="item" />
@@ -86,7 +86,7 @@
 			result () {
 				return this.dataMapel
 					.filter(mapel => mapel.group.name.includes(this.hasilFilter.group))
-	        .filter(mapel => mapel.major.name.includes(this.hasilFilter.major))
+					.filter(mapel => mapel.major.name.includes(this.hasilFilter.major))
 			}	
 		}
 	}

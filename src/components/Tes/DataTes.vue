@@ -10,7 +10,7 @@
       hide-details
     ></v-text-field>
     <v-row v-if="isLoading">
-    	<v-col 
+			<v-col 
 				v-for="(item, i) in 3" :key="i"
 				cols="12" 
 				md="4" sm="6">
@@ -18,11 +18,11 @@
 			</v-col>
     </v-row>
     <v-alert type="info" v-else-if="dataTes.length === 0">
-    	Data Tes belum ada, silahkan tambah data tes terlebih dahulu
-    	<TambahTes type="habis" />
+			Data Tes belum ada, silahkan tambah data tes terlebih dahulu
+			<TambahTes type="habis" />
     </v-alert>
     <v-alert type="info" v-else-if="hasilSearch.length === 0">
-    	Data yang dicari tidak ditemukan
+			Data yang dicari tidak ditemukan
     </v-alert>
 		<v-row dense v-else>
 			<v-col 
@@ -44,10 +44,8 @@
 </template>
 
 <script>
-	import { 
-		VCard, VCardText, VBtn,
+	import {
 		VRow, VCol,
-		VSpacer, VIcon, VChip,
 		VSheet, VAlert
 	} from 'vuetify/lib'
 	import TambahTes from '@/components/Tes/TambahTes'
@@ -58,9 +56,7 @@
 
 	export default{
 		components: {
-			VCard, VCardText, VBtn,
 			VRow, VCol,
-			VSpacer, VIcon, VChip,
 			VSheet, VAlert,
 			TambahTes, 
 			Loader,

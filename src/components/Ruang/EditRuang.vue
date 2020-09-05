@@ -17,11 +17,10 @@
         <v-card-text class="pa-6 pb-0">
           <v-form v-model="valid" ref="form">
             <v-select
-              :items="kelas"
+              :items="detailKelas"
               item-text="name"
               item-value="id"
-              return-object
-              v-model="detailRuang.group_id"
+              v-model="data.group.id"
               label="Kelas"
               outlined
               dense
@@ -29,17 +28,17 @@
             ></v-select>
             <v-select
               :items="detailJurusan"
-              item-text="major"
-              item-value="id"
-              v-model="detailRuang.major_id"
+              item-text="major.name"
+              item-value="major.id"
+              v-model="data.major.id"
+              :disabled="data.group.id === ''?true:false"
               label="Jurusan"
-              :disabled="detailRuang.group_id === ''?true:false"
               outlined
               dense
               :rules="requiredRule"              
             ></v-select>
             <v-text-field
-              v-model="detail.name"
+              v-model="data.name"
               label="Ruang Kelas"
               outlined
               dense
@@ -81,9 +80,10 @@
     VForm, VTextField, VSelect, VSpacer,
     VIcon
   } from 'vuetify/lib'
+  import { mapState } from 'vuex'
 
   export default {
-    props: ['detail', 'kelas', 'jurusan'],
+    props: ['data'],
 
     components: {
       VDialog, VCard,
@@ -102,36 +102,34 @@
           group_id: '',
           name: ''
         },
-        detailJurusan: [],
         requiredRule: [v => !!v || 'Data harus diisi']
       }
     },
 
-    created () {
-      var kelas = this.kelas
-        .filter(kelas => kelas.name === this.detail.group.toString())
-      this.detailRuang.group_id = {...kelas[0]}.id    
-
-      // this.detailJurusan = this.jurusan
-      //   .filter(jurusan => jurusan.group === {...kelas[0]}.name)
-      // this.detailRuang.major_id = {...this.detailJurusan[0]}.id
-
-      // var jurusan = this.detailJurusan
-      //   .filter(jurusan => jurusan.major === this.detail.major.toString())
-      // this.detailRuang.major_id = {...jurusan[0]}.id
-
-    },
-
-    watch: {
-      'detailRuang.group_id': function (val) {
-        this.detailJurusan = this.jurusan.filter(jurusan => jurusan.group.toString() === val.name)
-      }
+    computed: {
+      ...mapState('dataMaster', ['dataRuang', 'dataKelas', 'dataJurusan']),
+      detailKelas: {
+        get() {
+          return this.dataKelas
+        },
+        set(val) {
+          this.dataKelas.filter(kelas => kelas.id === val)
+        }
+      },
+      detailJurusan: {
+        get() {
+          return this.dataRuang.filter(ruang => ruang.group.id === this.data.group.id)
+        },
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === val)
+        }
+      },
     },
 
     methods: {
       validate () {
         if (this.$refs.form.validate()) {
-          this.detailRuang.name = this.detail.name
+          this.detailRuang.name = this.data.name
           this.detailRuang.group_id = this.detailRuang.group_id.id
           console.log(this.detailRuang)
         }

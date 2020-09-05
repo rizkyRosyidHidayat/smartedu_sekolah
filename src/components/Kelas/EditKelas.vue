@@ -56,7 +56,7 @@
     VDialog, VCard,
     VCardText, VCardActions,
     VBtn, VDivider,
-    VForm, VTextField, VSelect, VSpacer,
+    VForm, VTextField, VSpacer,
     VIcon
   } from 'vuetify/lib'
 
@@ -67,7 +67,7 @@
       VDialog, VCard,
       VCardText, VCardActions,
       VBtn, VDivider,
-      VForm, VTextField, VSelect, VSpacer,
+      VForm, VTextField, VSpacer,
       VIcon
     },
 

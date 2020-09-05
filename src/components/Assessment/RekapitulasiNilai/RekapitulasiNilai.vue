@@ -5,19 +5,6 @@
 			<v-row>
 				<v-col sm="12" class="py-0">
 					<v-select
-						:items="dataMapel"
-						item-text="name"
-						item-value="id"
-						v-model="hasilFilter.subject_id"
-						label="Mata pelajaran"
-						required
-						:rules="requiredRule"
-						outlined
-						dense
-					></v-select>
-				</v-col>
-				<v-col sm="12" class="py-0">
-					<v-select
 						:items="dataKelas"
 						item-text="name"
 						item-value="id"
@@ -31,9 +18,10 @@
 				</v-col>
 				<v-col sm="12" class="py-0">
 					<v-select
-						:items="dataJurusan"
-						item-text="name"
-						item-value="id"
+						:items="detailJurusan"
+						item-text="major.name"
+						item-value="major.id"
+						:disabled="hasilFilter.group_id===''?true:false"
 						v-model="hasilFilter.major_id"
 						label="Jurusan"
 						required
@@ -55,6 +43,19 @@
 						outlined
 						dense
 					></v-select>
+				</v-col>
+				<v-col sm="12" class="py-0">
+					<v-autocomplete
+						:items="dataMapel"
+						item-text="name"
+						item-value="id"
+						v-model="hasilFilter.subject_id"
+						label="Mata pelajaran"
+						required
+						:rules="requiredRule"
+						outlined
+						dense
+					></v-autocomplete>
 				</v-col>
 				<v-col sm="12" class="py-0">
 					<div class="d-flex">
@@ -170,7 +171,15 @@
 					x.no = i+1
 					return x
 				})
-			}
+			},
+			detailJurusan: {
+        set() {
+          this.dataJurusan.filter(jurusan => jurusan.id === this.hasilFilter.major_id)
+        },
+        get() {
+          return this.dataRuang.filter(ruang => ruang.group.id === this.hasilFilter.group_id)
+        }
+      }
 		},
 
 		methods: {

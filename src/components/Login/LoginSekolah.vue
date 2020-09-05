@@ -4,48 +4,48 @@
 			<!-- <v-row dense>
 				<v-col cols="12" md="6" sm="12">
 					<v-select
-	          :items="tahun"
-	          v-model="dataLogin.tahun"
-	          label="Tahun Ajaran"
-	          outlined
-	          dense
-	          :rules="requiredRule"              
-	        ></v-select> 
+						:items="tahun"
+						v-model="dataLogin.tahun"
+						label="Tahun Ajaran"
+						outlined
+						dense
+						:rules="requiredRule"              
+					></v-select> 
 				</v-col>
 				<v-col cols="12" md="6" sm="12">
 					<v-select
-	          :items="semester"
-	          v-model="dataLogin.semester"
-	          label="Semester"
-	          outlined
-	          dense
-	          :rules="requiredRule"              
-	        ></v-select>
+						:items="semester"
+						v-model="dataLogin.semester"
+						label="Semester"
+						outlined
+						dense
+						:rules="requiredRule"              
+					></v-select>
 				</v-col>
 			</v-row> -->	
 			<v-text-field
-	      v-model="dataLogin.username"
-	      label="Username"
-	      outlined
-	      v-mask="mask"
-	      dense
-	      :rules="requiredRule"
-	      autocomplete="off"
-	    ></v-text-field>
+				v-model="dataLogin.username"
+				label="Username"
+				outlined
+				v-mask="mask"
+				dense
+				:rules="requiredRule"
+				autocomplete="off"
+			></v-text-field>
 			<v-text-field
-	      v-model="dataLogin.password"
-	      label="Password"
-	      :append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
-	      :type="showpassword ? 'text' : 'password'"
-	      @click:append="showpassword = !showpassword"
-	      outlined
-	      dense
-	      v-mask="mask"
-	      :rules="requiredRule"
-	      autocomplete="off"
-	    ></v-text-field>
+				v-model="dataLogin.password"
+				label="Password"
+				:append-icon="showpassword ? 'mdi-eye' : 'mdi-eye-off'"
+				:type="showpassword ? 'text' : 'password'"
+				@click:append="showpassword = !showpassword"
+				outlined
+				dense
+				v-mask="mask"
+				:rules="requiredRule"
+				autocomplete="off"
+			></v-text-field>
 
-	    <Notif :msg="msg" :status="status" @visible="visible" />
+			<Notif :msg="msg" :status="status" @visible="visible" />
 		</v-card-text>
 		<v-divider></v-divider>
 		<v-card-actions class="ma-2">
@@ -72,7 +72,7 @@
 
 <script>
 	import {
-		VForm, VRow, VCol,
+		VForm,
 		VBtn, VChip, VIcon
 	} from 'vuetify/lib'
 	import { postDataLogin } from '@/config/login'
@@ -85,7 +85,7 @@
 		},
 
 		components: {
-			VForm, VRow, VCol,
+			VForm,
 			VBtn, VChip, VIcon,
 			Notif
 		},
@@ -127,12 +127,12 @@
 					}
 					this.isLoading = true					
 					postDataLogin (data)
-						.then(res => {
+						.then(() => {
 							this.isLoading = false							
 							this.status = true
-							window.location.href="/sekolah"
+							window.location.href="/"
 						})
-						.catch(err => {
+						.catch(() => {
 							this.isLoading = false
 							this.status = false
 						})

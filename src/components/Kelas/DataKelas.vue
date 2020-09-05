@@ -13,20 +13,20 @@
 						<v-spacer></v-spacer>					
 					</div>
 					<v-text-field
-		        v-model="search"
-		        prepend-icon="mdi-magnify"
-		        label="Cari Kelas"
-		        single-line
-		        autocomplete="off"
-		        hide-details
-		      ></v-text-field>
+						v-model="search"
+						prepend-icon="mdi-magnify"
+						label="Cari Kelas"
+						single-line
+						autocomplete="off"
+						hide-details
+					></v-text-field>
 				</div>
 			</template>
 			<template v-slot:no-result>
-	      <v-alert type="info" class="mt-4">
-	        <div>Data tidak ditemukan</div>
-	      </v-alert>
-	    </template>
+				<v-alert type="info" class="mt-4">
+					<div>Data tidak ditemukan</div>
+				</v-alert>
+			</template>
 			<template v-slot:item.action="{item}">
 				<div class="d-flex">
 					<EditKelas :detail="detailKelas(item.id)"/>
@@ -88,7 +88,7 @@
 						this.isLoading = false
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					this.isLoading = false
 				})
 		}

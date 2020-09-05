@@ -3,19 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import CKEditor from './plugins/ckeditor'
-import excel from './plugins/export'
-// import VueTour from 'vue-tour'
-// require('vue-tour/dist/vue-tour.css')
-// Vue.use(VueTour)
 
 Vue.config.productionTip = false
 
 new Vue({
   router,
-  store,
-  CKEditor,
-  excel,
   vuetify,
+  store,
   render: h => h(App)
 }).$mount('#app')

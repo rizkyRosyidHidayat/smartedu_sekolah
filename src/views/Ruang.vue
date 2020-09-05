@@ -13,18 +13,14 @@
 <script>
 	import { 
 		VCard, VCardText,
-		VIcon, VBtn,
-		VRow, VSelect, VCol,
-		VSpacer
+		VIcon
 	} from 'vuetify/lib'
 	import DataRuang from '@/components/Ruang/DataRuang'
 
 	export default {
 		components: {
 			VCard, VCardText,
-			VIcon, VBtn,
-			VRow, VSelect, VCol,
-			VSpacer,
+			VIcon,
 			DataRuang
 		},
 

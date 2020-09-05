@@ -15,17 +15,17 @@
 				<v-col cols="12" md="4" sm="12">
 					<center>
 						<v-avatar size="150" class="mt-3">
-	            <img :src="require('@/assets/se.png')" alt="profile" />
-	          </v-avatar>
+							<img :src="require('@/assets/se.png')" alt="profile" />
+            </v-avatar>
 
-	          <v-file-input
-			        class="mt-3"			        
-			    		prepend-icon="mdi-file-image"
-			    		accept="image/*"
-			        show-size
-			        counter
-			        label="Logo sekolah"
-			      ></v-file-input>
+						<v-file-input
+							class="mt-3"			        
+							prepend-icon="mdi-file-image"
+							accept="image/*"
+							show-size
+							counter
+							label="Logo sekolah"
+						></v-file-input>
 					</center>
 				</v-col>
 				<v-col cols="12" md="4" sm="12">
@@ -139,18 +139,18 @@
 			<v-spacer></v-spacer>
 			<div>
 				<v-checkbox
-		      v-model="checkbox"
-		      :rules="[v => !!v || 'Anda harus mennyetujuinya']"
-		      label="Saya menerima kebijakan yang diberikan oleh SmartEdu"
-		      class="mt-0"
-		      required
-		    ></v-checkbox>
-		    <center>
-		    	<v-btn
+					v-model="checkbox"
+					:rules="[v => !!v || 'Anda harus mennyetujuinya']"
+					label="Saya menerima kebijakan yang diberikan oleh SmartEdu"
+					class="mt-0"
+					required
+				></v-checkbox>
+				<center>
+					<v-btn
 						color="primary" class="mb-3">
 						Simpan
 					</v-btn>
-		    </center>
+				</center>
 			</div>
 			<v-spacer></v-spacer>
 		</v-card-actions>

@@ -29,7 +29,7 @@ const dataResult = {
 			context.commit('updateIsLoading', payload)
 		},
 
-		getDataResult (context, payload) {
+		getDataResult (context) {
 			getDataResult ()
 				.then(res => {
 					if (res.status === 200) {
@@ -38,7 +38,7 @@ const dataResult = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateResultStatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -52,7 +52,7 @@ const dataResult = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateResultStatus', false)
 					context.dispatch('updateIsLoading', false)
 				})

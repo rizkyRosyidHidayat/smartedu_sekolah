@@ -17,10 +17,10 @@
 			:items="dataJurusan"
 			:items-per-page="10">
 			<template v-slot:no-result>
-	      <v-alert type="info" class="mt-4">
-	        <div>Data tidak ditemukan</div>
-	      </v-alert>
-	    </template>
+				<v-alert type="info" class="mt-4">
+					<div>Data tidak ditemukan</div>
+				</v-alert>
+			</template>
 		</v-data-table>
 	</div>
 </template>

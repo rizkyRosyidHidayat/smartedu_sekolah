@@ -31,7 +31,7 @@ const dataSiswa = {
 			context.commit('updateIsLoading', payload)
 		},
 
-		getDataSiswa (context, payload) {
+		getDataSiswa (context) {
 			getDataSiswa ()
 				.then(res => {
 					if (res.status === 200) {
@@ -40,7 +40,7 @@ const dataSiswa = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateSiswatatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -54,7 +54,7 @@ const dataSiswa = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateSiswatatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -68,7 +68,7 @@ const dataSiswa = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateSiswatatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -82,7 +82,7 @@ const dataSiswa = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateSiswatatus', false)
 					context.dispatch('updateIsLoading', false)
 				})

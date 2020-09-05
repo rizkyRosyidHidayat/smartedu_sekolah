@@ -43,7 +43,7 @@ const dataSoal = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updaSoaltatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -56,21 +56,21 @@ const dataSoal = {
 						var hasil = res.data.filter(soal => soal.id === payload.id_soal)
 						var soal = {...hasil[0]}
 						var detail = {}
-		    		detail.id = soal.id
-		        detail.pertanyaan = soal.pertanyaan
-		        detail.kunci = soal.jawaban[0].kunci
-		        detail.id_subject = payload.id_mapel
-		        detail.jawabanA = soal.pilihanjawaban[0].teks
-		        detail.jawabanB = soal.pilihanjawaban[1].teks
-		        detail.jawabanC = soal.pilihanjawaban[2].teks
-		        detail.jawabanD = soal.pilihanjawaban[3].teks
-		        detail.jawabanE = soal.pilihanjawaban[4].teks
-		        detail.pembahasan = soal.pembahasan
+						detail.id = soal.id
+						detail.pertanyaan = soal.pertanyaan
+						detail.kunci = soal.jawaban[0].kunci
+						detail.id_subject = payload.id_mapel
+						detail.jawabanA = soal.pilihanjawaban[0].teks
+						detail.jawabanB = soal.pilihanjawaban[1].teks
+						detail.jawabanC = soal.pilihanjawaban[2].teks
+						detail.jawabanD = soal.pilihanjawaban[3].teks
+						detail.jawabanE = soal.pilihanjawaban[4].teks
+						detail.pembahasan = soal.pembahasan
 						context.commit('updateDetailSoal', detail)
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updaSoaltatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -85,7 +85,7 @@ const dataSoal = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updaSoaltatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -97,7 +97,7 @@ const dataSoal = {
 					if (res.status === 200) {
 						context.dispatch('getDataSoal', payload.id_mapel)
 						context.dispatch('updateIsLoading', false)
-        		window.location.reload()						
+						window.location.reload()						
 					}
 				})
 		},
@@ -111,7 +111,7 @@ const dataSoal = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updaSoaltatus', false)
 					context.dispatch('updateIsLoading', false)
 				})

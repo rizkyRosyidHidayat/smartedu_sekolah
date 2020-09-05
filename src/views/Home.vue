@@ -2,13 +2,13 @@
   <div>
     <Dashboard />
     <v-row>
-    	<v-col cols="12" md="6" sm="12">
-    		<Kontak />
-    		<Tutorial class="mt-3" />
-    	</v-col>
-    	<v-col cols="12" md="6" sm="12">
-    		<Informasi />
-    	</v-col>
+			<v-col cols="12" md="6" sm="12">
+				<Kontak />
+				<Tutorial class="mt-3" />
+			</v-col>
+			<v-col cols="12" md="6" sm="12">
+				<Informasi />
+			</v-col>
     </v-row>
   </div>
 </template>
@@ -23,12 +23,12 @@
 	import Informasi from '@/components/Dashboard/Informasi.vue'
 
 	export default {
-	  components: {
+		components: {
 			VRow, VCol,
-	    Informasi,
-	    Tutorial,
-	    Kontak,
-	    Dashboard
-	  }
+			Informasi,
+			Tutorial,
+			Kontak,
+			Dashboard
+		}
 	}
 </script>

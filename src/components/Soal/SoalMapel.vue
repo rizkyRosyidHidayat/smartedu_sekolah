@@ -13,9 +13,7 @@
 <script>
 	import { 
 		VCard, VCardText,
-		VIcon, VBtn,
-		VRow, VSelect, VCol,
-		VSpacer
+		VIcon
 	} from 'vuetify/lib'
 	import DataSoalMapel from '@/components/Soal/SoalMapel/DataSoalMapel'
 
@@ -23,9 +21,7 @@
 		props: ['name'],
 		components: {
 			VCard, VCardText,
-			VIcon, VBtn,
-			VRow, VSelect, VCol,
-			VSpacer,
+			VIcon,
 			DataSoalMapel
 		}
 	}

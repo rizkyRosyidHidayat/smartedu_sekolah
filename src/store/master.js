@@ -42,7 +42,7 @@ var dataMaster = {
 		updateIsLoading (context, payload) {
 			context.commit('updateIsLoading', payload)
 		},
-		getDataKelas (context, payload) {
+		getDataKelas (context) {
 			getDataKelas () 
 				.then(res => {
 					if (res.status === 200) {
@@ -50,11 +50,11 @@ var dataMaster = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 				})
 		},
-		getDataJurusan (context, payload) {
+		getDataJurusan (context) {
 			getDataJurusan () 
 				.then(res => {
 					if (res.status === 200) {
@@ -62,11 +62,11 @@ var dataMaster = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 				})
 		},
-		getDataRuang (context, payload) {
+		getDataRuang (context) {
 			getDataRuang () 
 				.then(res => {
 					if (res.status === 200) {
@@ -74,12 +74,12 @@ var dataMaster = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 				})
 		},
 		// Mapel
-		getDataMapel (context, payload) {
+		getDataMapel (context) {
 			getDataMapel () 
 				.then(res => {
 					if (res.status === 200) {
@@ -87,7 +87,7 @@ var dataMaster = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 				})
 		},
@@ -100,7 +100,7 @@ var dataMaster = {
 						context.commit('updateStatus', true)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 					context.commit('updateStatus', false)
 				})
@@ -114,7 +114,7 @@ var dataMaster = {
 						context.commit('updateStatus', true)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 					context.commit('updateStatus', false)
 				})
@@ -128,7 +128,7 @@ var dataMaster = {
 						context.commit('updateStatus', true)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.dispatch('updateIsLoading', false)					
 					context.commit('updateStatus', false)
 				})

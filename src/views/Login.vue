@@ -3,7 +3,9 @@
 		<v-overlay class="bg-login" :style="`background-image: url(${require('@/assets/bg.jpeg')})`">
 			<v-card light color="white" width="500px">
 				<v-card-title>
-					<img src="@/assets/logo.png" alt="logo" class="mx-auto" />
+					<div class="text-center" style="width: 100%;">
+						<img src="@/assets/se.png" alt="logo" class="mx-auto" height="60px" />
+					</div>
 					<Header/>
 				</v-card-title>
 				<v-divider></v-divider>
@@ -20,8 +22,8 @@
 <script>
 	import {
 		VApp, VOverlay, VCard,
-		VCardTitle, VCardText, VCardActions,
-		VDivider,
+		VCardTitle,
+		VDivider
 	} from 'vuetify/lib'
 	import Header from '@/components/Login/Header'
 	import LoginSekolah from '@/components/Login/LoginSekolah'
@@ -31,7 +33,7 @@
 
 		components: {
 			VApp, VOverlay, VCard,
-			VCardTitle, VCardText, VCardActions,
+			VCardTitle,
 			VDivider,
 			Header, LoginSekolah
 		}

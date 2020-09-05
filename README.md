@@ -1,4 +1,4 @@
-# smartedu
+# kesesi
 
 ## Project setup
 ```

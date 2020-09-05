@@ -1,5 +1,5 @@
 import http from './http'
 
-export function getDataRuang(data) {
+export function getDataRuang() {
 	return http.get('room')
 }

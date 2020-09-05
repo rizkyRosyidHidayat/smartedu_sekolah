@@ -3,13 +3,13 @@
 		<v-card-text>
 			<Notif :msg="msg" :status="status" @visible="visible" />
 			<div class="title">Soal</div>
-      <ckeditor :editor="editor" v-model="dataSoal.pertanyaan" :config="editorConfig"></ckeditor>
+      <ckeditor :editor="editor" v-model="detailSoal.pertanyaan" :config="editorConfig"></ckeditor>
 			<!-- <VueCkeditor v-model="dataSoal.pertanyaan" /> -->
 			<br>
 			<div class="title">Kunci Jawaban</div>
 			<v-select
 				:items="kunci"
-				v-model="dataSoal.kunci"
+				v-model="detailSoal.kunci"
 				placeholder="Kunci"
 				outlined
 				dense
@@ -30,12 +30,12 @@
 				</v-tab>
 			</v-tabs>
 
-			<br>
-			<ckeditor :editor="editor" v-model="dataJawaban" :config="editorConfig"></ckeditor>
+				<br>
+				<ckeditor :editor="editor" v-model="dataJawaban" :config="editorConfig"></ckeditor>
 			<br>		
 			<div class="title">Pembahasan</div>
-      <ckeditor :editor="editor" v-model="dataSoal.pembahasan" :config="editorConfig"></ckeditor>
-			<!-- <VueCkeditor v-model="dataSoal.pembahasan" /> -->
+      <ckeditor :editor="editor" v-model="detailSoal.pembahasan" :config="editorConfig"></ckeditor>
+			<!-- <VueCkeditor v-model="detailSoal.pembahasan" /> -->
 		</v-card-text>
 		<v-card-actions>
 			<v-snackbar
@@ -73,24 +73,25 @@
 <script>
 	import { 
 		VCardText,
-		VIcon, VBtn, VSelect,
+		VIcon, VBtn,
+		VSelect,
 		VSpacer, VTabs, VTabsSlider,
 		VTab, VCardActions, VSnackbar
 	} from 'vuetify/lib'
-
-	import { postDataSoal } from '@/config/soal'
 
 	// import VueCkeditor from './vueckeditor'
 	import Notif from '@/components/Notif'
 	import CKEditor from '@ckeditor/ckeditor5-vue';
 	import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+	import { mapState } from 'vuex'	
 
 	// initSample()
 
 	export default {
 		components: {
 			VCardText,
-			VIcon, VBtn, VSelect,
+			VIcon, VBtn,
+			VSelect,
 			VSpacer, VTabs, VTabsSlider,
 			VTab, VCardActions, VSnackbar,
 			ckeditor: CKEditor.component,
@@ -141,22 +142,21 @@
 				index: 4
 			}],
 			tabItem: 'jawabanA',
-			isLoading: false,
-			status: null,
 			msg: {
 				success: 'Soal berhasil ditambahkan',
 				error: 'Soal gagal ditambahkan',
 				visible: false
 			}
-		}),
+		}),	
 
 		computed: {
+			...mapState('dataSoal', ['status', 'isLoading', 'detailSoal']),    	
 			dataJawaban: {
 				get() {
-					return this.dataSoal[this.tabItem]
+					return this.detailSoal[this.tabItem]
 				},
 				set(val) {
-					this.dataSoal[this.tabItem] = val 
+					this.detailSoal[this.tabItem] = val 
 				}
 			}
 		},
@@ -167,49 +167,24 @@
 				// this.dataSoal[this.tabItem] = val
 			},
 			simpan () {
-				this.dataSoal.id_subject = parseInt(this.$route.params.id)
-
-				var hasil = []
-
-				for (let [key, value] of Object.entries(this.dataSoal)) {
-					hasil.push(value)
-					console.log(key)
-				}
-				var kosong = hasil.includes('')
-				
-				if (!kosong) {
-					this.isLoading = true
-					postDataSoal (this.dataSoal)
-						.then(res => {
-							// console.log(res)
-							if (res.status === 201) {
-								this.isLoading = false
-								this.status = true
-								this.$router
-								.push({name: 'soal-mapel', 
-									params: { 
-										id: parseInt(this.$route.params.id), 
-										name: this.$route.params.name
-									}
-								})							
-							}
-						})
-						.catch(() => {
-							this.isLoading = false
-							this.status = false
-						})
-					this.msg.visible = true
-					window.scrollTo({
-						top: 0,
-						left: 0,
-						behavior: 'smooth'
-					});
-				} else {
-					this.valid = true
-				}
+				this.$store.dispatch('dataSoal/putDataSoal', this.detailSoal)
+				this.$store.dispatch('dataSoal/updateIsLoading', true)
+				this.msg.visible = true
+				window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth'
+        });
+        // this.$router.go(-1)
 			},
 			visible(val) {
 				this.msg.visible = val
+			}
+		},
+
+		watch: {
+			status(val) {
+				if (val === true) this.$router.go(-1)
 			}
 		}
 	}

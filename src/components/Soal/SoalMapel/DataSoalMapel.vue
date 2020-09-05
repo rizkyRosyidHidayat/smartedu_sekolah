@@ -3,6 +3,7 @@
     <Loader type="table" v-if="isLoading" />
     <v-data-table
       v-else
+      class="tampil-soal"
       :headers="header"
       :search="search"
       :items="dataSoal"
@@ -12,14 +13,15 @@
           <div class="d-flex">
             <v-spacer></v-spacer>  
             <!-- <UploadSoal/> -->
-            <a :href="urlTambah">
+            <!-- <a :href="urlTambah"> -->
               <v-btn 
                 depressed
+                @click="$router.push({ name: 'tambah-soal', params: { id: id, name: name } })"
                 color="primary">
                 <v-icon class="mr-3">mdi-plus</v-icon>
                 tambah soal
               </v-btn>
-            </a>   
+            <!-- </a>    -->
           </div>
           <v-text-field
             v-model="search"
@@ -58,13 +60,16 @@
   </div>
 </template>
 
+<style>
+  .tampil-soal img{ width: 100px !important; }
+</style>
+
 <script>
   import {
     VDataTable, VAlert,
     VSpacer, VBtn, VIcon 
   } from 'vuetify/lib'
   import HapusSoalMapel from '@/components/Soal/SoalMapel/HapusSoalMapel'
-  import UploadSoal from '@/components/Soal/SoalMapel/UploadSoal'
   import Loader from '@/components/Loader'
   import { mapState } from 'vuex'
 
@@ -72,7 +77,6 @@
     components: {
       VDataTable, VAlert,
       VSpacer, VBtn, VIcon,
-      UploadSoal,
       HapusSoalMapel,
       Loader
     },
@@ -93,7 +97,8 @@
     computed: {
       ...mapState('dataSoal', ['dataSoal' ,'isLoading']),
       urlTambah() {      
-        return `http://${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        // return `${process.env.VUE_APP_HOSTNAME}/tambah-soal/${this.id}/${this.name}`
+        return `https://cbt.smknukesesi.sch.id/tambah-soal/${this.id}/${this.name}`
       }
     },
 

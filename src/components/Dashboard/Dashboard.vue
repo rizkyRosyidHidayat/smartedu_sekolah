@@ -20,7 +20,7 @@
 						</div>
 						<div 
 							:class="`pa-3 ${item.color[1]} text-center pointer radius`"
-	        		@click="$router.push({name: item.link})">
+							@click="$router.push({name: item.link})">
 							Selengkapnya <v-icon>mdi-chevron-right</v-icon>
 						</div>
 					</v-sheet>

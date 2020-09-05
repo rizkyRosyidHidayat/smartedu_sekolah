@@ -13,41 +13,38 @@
 						<v-spacer></v-spacer>					
 					</div>
 					<v-text-field
-		        v-model="search"
-		        prepend-icon="mdi-magnify"
-		        label="Cari Ruang"
-		        single-line
-		        autocomplete="off"
-		        hide-details
-		      ></v-text-field>
+						v-model="search"
+						prepend-icon="mdi-magnify"
+						label="Cari Ruang"
+						single-line
+						autocomplete="off"
+						hide-details
+					></v-text-field>
 				</div>
 			</template>
 			<template v-slot:item.name="{ item }">
-	      {{ item.group.name }} {{ namaJurusan(item.major.name) }} {{ item.name }}
-	    </template>
+				{{ item.group.name }} {{ namaJurusan(item.major.name) }} {{ item.name }}
+			</template>
 			<template v-slot:no-result>
-	      <v-alert type="info" class="mt-4">
-	        <div>Data tidak ditemukan</div>
-	      </v-alert>
-	    </template>
+				<v-alert type="info" class="mt-4">
+					<div>Data tidak ditemukan</div>
+				</v-alert>
+			</template>
 			<template v-slot:item.action="{item}">
 				<div class="d-flex">
-					<EditRuang :detail="detailRuang(item.id)" :kelas="dataKelas" :jurusan="dataJurusan" />
+					<EditRuang :data="item" />
 				</div>
 			</template>
 		</v-data-table>
 	</div>
 </template>
 
-<script>
+	<script>
 	import {
 		VDataTable, VAlert,
 		VSpacer
 	} from 'vuetify/lib'
-	import { getDataRuang } from '@/config/ruang'
-	import { getDataKelas } from '@/config/kelas'
-	import { getDataJurusan} from '@/config/jurusan'
-
+	import {mapState} from 'vuex'
 	import EditRuang from '@/components/Ruang/EditRuang'
 	import Loader from '@/components/Loader'
 
@@ -67,11 +64,7 @@
 				{ text: 'Ruang Kelas', value: 'name', sortable: false },
 				{ text: 'Action', value: 'action', sortable: false }
 			],
-			dataRuang: [],
-			dataKelas: [],
-			dataJurusan: [],
-			search: '',
-			isLoading: true
+			search: ''
 		}),
 
 		methods: {
@@ -85,36 +78,21 @@
 					return singkatan.join('')
 				}
 			},
-			detailRuang (id) {
-				var hasil = this.dataRuang.filter(ruang => ruang.id === id)
-				return {...hasil[0]}
-			}
+			// detailRuang (id) {
+			// 	var hasil = this.dataRuang.filter(ruang => ruang.id === id)
+			// 	return {...hasil[0]}
+			// }
 		},		
 
 		created () {
-			getDataRuang ()
-				.then(res => {
-					if (res.status === 200) {
-						this.dataRuang = res.data.data
-						this.isLoading = false
-						// console.log(this.dataRuang)
-					}
-				})
-				.catch(err => {
-					this.isLoading = false
-				})
-			getDataKelas ()
-				.then(res => {
-					if (res.status === 200) {
-						this.dataKelas = res.data.data
-					}
-				})
-			getDataJurusan ()
-				.then(res => {
-					if (res.status === 200) {
-						this.dataJurusan = res.data.data
-					}
-				})
+			this.$store.dispatch('dataMaster/getDataKelas')
+			this.$store.dispatch('dataMaster/getDataRuang')
+			this.$store.dispatch('dataMaster/getDataJurusan')
+			this.$store.dispatch('dataMaster/updateIsLoading', true)
+		},
+
+		computed: {
+			...mapState('dataMaster', ['isLoading', 'dataRuang']),
 		}
 	}
-</script>
+	</script>

@@ -1,69 +1,69 @@
 <template>
   <v-app>
     <v-app-bar app elevation="2" class="white px-md-12">
-  		<v-btn icon @click="$router.go(-1)">
+			<v-btn icon @click="$router.go(-1)">
 				<v-icon>mdi-chevron-left</v-icon>    			
-  		</v-btn>
+			</v-btn>
       <v-toolbar-title>
         SmartEdu
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon color="primary" @click="$router.push({ name: 'edit-soal', params: { idSoal: dataSoal[page].id, idMapel: $route.params.id } })">
 				<v-icon small>mdi-pencil</v-icon>		
-  		</v-btn>
-  		<!-- <v-btn text color="error">
+			</v-btn>
+			<!-- <v-btn text color="error">
 				<v-icon class="mr-3">mdi-trash-can</v-icon>   
 				hapus 			
-  		</v-btn> -->
-  		<HapusSoalMapel :id="dataSoal[page].id" :idMapel="$route.params.id" />
-    </v-app-bar>
+			</v-btn> -->
+			<HapusSoalMapel :id="dataSoal[page].id" :idMapel="$route.params.id" />
+		</v-app-bar>
 
-    <v-content>
-    	<v-container>
-    		<div class="my-6">
-	    		Soal {{ page+1 }}
-	    		<span class="ml-3 font-weight-bold">{{ name }}</span>
-	    	</div>
-	      <v-card class="scroll pa-4" max-height="63vh" height="63vh">
-	      	<Loader type="paragraph" v-if="isLoading" />
-	      	<template v-else-if="dataSoal.length === 0">
-	      		<v-alert type="info">
-	      			Soal pada mata pelajaran ini masih kosong, silahkan tambahkan soalnya terlebih dahulu.
-	      		</v-alert>
-	      	</template>
-	      	<template v-else v-for="(item, index) in dataSoal">
-		      	<v-card-text v-if="index === page" :key="index" class="black--text">		      		
-		      		<div v-html="item.pertanyaan"></div>
+		<v-content>
+			<v-container class="review-soal">
+				<div class="my-6">
+					Soal {{ page+1 }}
+					<span class="ml-3 font-weight-bold">{{ name }}</span>
+				</div>
+				<v-card class="scroll pa-4" max-height="63vh" height="63vh">
+					<Loader type="paragraph" v-if="isLoading" />
+					<template v-else-if="dataSoal.length === 0">
+						<v-alert type="info">
+							Soal pada mata pelajaran ini masih kosong, silahkan tambahkan soalnya terlebih dahulu.
+						</v-alert>
+					</template>
+					<template v-else v-for="(item, index) in dataSoal">
+						<v-card-text v-if="index === page" :key="index" class="black--text">		      		
+							<div v-html="item.pertanyaan"></div>
 
-		      		<div class="mt-6 ml-3">
-		      			<div 
+							<div class="mt-6 ml-3">
+								<div 
 									class="custom-control custom-radio my-2" 
 									v-for="(jawaban, index) in item.pilihanjawaban" 
 									:key="index">
-								  <input 
-								  	type="radio" 
-								  	name="jawaban" 
-								  	:id="`jawaban${index}`"
-								  	v-model="selected" 
-								  	readonly 
-								  	:value="jawaban.key" 
-								  	class="custom-control-input"
-								  	:class="`radio${index}`" />
-								  <label 
-								  	:class="`custom-control-label huruf${index}`"
-								  	:for="`jawaban${index}`" 
-								  	v-html="jawaban.teks"
-								  ></label>
+									<input 
+										type="radio" 
+										name="jawaban" 
+										:id="`jawaban${index}`"
+										v-model="selected" 
+										readonly 
+										:value="jawaban.key" 
+										class="custom-control-input"
+										:class="`radio${index}`" />
+									<label 
+										:class="`custom-control-label huruf${index}`"
+										:for="`jawaban${index}`" 
+										v-html="jawaban.teks"
+									></label>
 								</div>
-		      		</div>
-		      	</v-card-text>	      		
-	      	</template>
-	      </v-card>
-    	</v-container>
-    </v-content>    
+							</div>
+						</v-card-text>	      		
+					</template>
+				</v-card>
+			</v-container>
+		</v-content>    
 
-    <v-footer app absolute bottom inset class="py-0 white">      
-    	<div class="content-footer">
+		<v-footer app absolute bottom inset class="py-0 white">      
+			<div class="content-footer">
 				<div class="pagination">
 					<v-btn 
 						depressed
@@ -168,8 +168,8 @@
     content: "E";		
 	}
 	input[type=radio]:checked + .custom-control-label::before {
-	  background-color: #599CDE;
-	  color: #fff;
+		background-color: #599CDE;
+		color: #fff;
 	}
 	/*style pagination*/
 	.v-btn:not(.v-btn--round).v-size--default{
@@ -195,7 +195,6 @@
     VContent, 
     VFooter,
     VAppBar, VSpacer,
-    VAppBarNavIcon,
     VToolbarTitle,
     VCard, VCardText, 
     VContainer
@@ -205,14 +204,13 @@
   import {getDataSoal} from '@/config/soal'
 
   export default {
-  	props: ['id', 'name'],
+		props: ['id', 'name'],
 
     components: {
       VApp,
       VContent,
       VFooter,
       VAppBar, VSpacer,
-      VAppBarNavIcon,
       VToolbarTitle,
       VCard, VCardText, 
       VContainer,
@@ -221,47 +219,47 @@
     },
 
     data: () => ({
-    	page: 0,
-    	dataSoal: [{ id: 0 }],
-    	jawaban: [
-    		{ teks: 'lorem ipsum dolor', huruf: 'A' },
-    		{ teks: 'lorem ipsum dolor', huruf: 'B' },
-    		{ teks: 'lorem ipsum dolor', huruf: 'C' },
-    		{ teks: 'lorem ipsum dolor', huruf: 'D' },
-    		{ teks: 'lorem ipsum dolor', huruf: 'E' }
-    	],
-    	selected: '',
+			page: 0,
+			dataSoal: [{ id: 0 }],
+			jawaban: [
+				{ teks: 'lorem ipsum dolor', huruf: 'A' },
+				{ teks: 'lorem ipsum dolor', huruf: 'B' },
+				{ teks: 'lorem ipsum dolor', huruf: 'C' },
+				{ teks: 'lorem ipsum dolor', huruf: 'D' },
+				{ teks: 'lorem ipsum dolor', huruf: 'E' }
+			],
+			selected: '',
 			option: ['a', 'b', 'c', 'd', 'e'],
 			isLoading: false
-    }),
+		}),
 
-    created () {
-      this.isLoading = true
-      getDataSoal(parseInt(this.id))
-        .then(res => {
-          if (res.status === 200) {
-            this.dataSoal = res.data
-            this.selected = res.data[this.page].jawaban[0].kunci
-            this.isLoading = false
-          }
-        })
-        .catch(err => {
-          this.isLoading = false
-        })
-    },
+		created () {
+			this.isLoading = true
+			getDataSoal(parseInt(this.id))
+				.then(res => {
+					if (res.status === 200) {
+						this.dataSoal = res.data
+						this.selected = res.data[this.page].jawaban[0].kunci
+						this.isLoading = false
+					}
+				})
+				.catch(() => {
+					this.isLoading = false
+				})
+		},
 
-    watch: {
-    	page (val) {
-    		this.dataSoal.filter((soal, index) => {
-    			if (index === val) {
-    				soal.pilihanjawaban.filter(jawaban => {
-    					if (jawaban.key === soal.jawaban[0].kunci) {
-    						this.selected = jawaban.key
-    					}
-    				})
-    			}
-    		})
-    	}
+		watch: {
+			page (val) {
+				this.dataSoal.filter((soal, index) => {
+					if (index === val) {
+						soal.pilihanjawaban.filter(jawaban => {
+							if (jawaban.key === soal.jawaban[0].kunci) {
+								this.selected = jawaban.key
+							}
+						})
+					}
+				})
+			}
     }
   }
 </script>

@@ -46,8 +46,8 @@
 						<td>:</td>
 						<td>
 							<v-chip label>
-					      <b>{{ data.token }}</b>
-					    </v-chip>
+								<b>{{ data.token }}</b>
+							</v-chip>
 						</td>
 					</tr>
 				</tbody>
@@ -55,23 +55,23 @@
 		</v-card-text>
 		<v-divider></v-divider>
 		<v-card-actions>
-	    <v-spacer></v-spacer>
-    	<v-btn 
-	    	v-if="data.status === 0"
-	    	color="success"
-	    	:loading="isLoadingToken"
-	    	@click="mulaiTes(data.id)"
-	    	depressed>
-	    	mulai tes
-	    </v-btn>
-	    <v-btn 
-    		v-else
-	    	color="error"
-	    	:loading="isLoadingToken"
-	    	@click="akhiriTes(data.id)"
-	    	depressed>
-	    	akhiri tes
-	    </v-btn>
+			<v-spacer></v-spacer>
+			<v-btn 
+				v-if="data.status === 0"
+				color="success"
+				:loading="isLoadingToken"
+				@click="mulaiTes(data.id)"
+				depressed>
+				mulai tes
+			</v-btn>
+			<v-btn 
+				v-else
+				color="error"
+				:loading="isLoadingToken"
+				@click="akhiriTes(data.id)"
+				depressed>
+				akhiri tes
+			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>

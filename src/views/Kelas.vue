@@ -13,18 +13,14 @@
 <script>
 	import { 
 		VCard, VCardText,
-		VIcon, VBtn,
-		VRow, VSelect, VCol,
-		VSpacer
+		VIcon
 	} from 'vuetify/lib'
 	import DataKelas from '@/components/Kelas/DataKelas'
 
 	export default {
 		components: {
 			VCard, VCardText,
-			VIcon, VBtn,
-			VRow, VSelect, VCol,
-			VSpacer,
+			VIcon,
 			DataKelas
 		},
 

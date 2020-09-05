@@ -50,7 +50,7 @@ const dataTes = {
 			context.commit('updateIsLoadingToken', payload)
 		},
 
-		getDataTes (context, payload) {
+		getDataTes (context) {
 			getDataTes ()
 				.then(res => {
 					if (res.status === 200) {
@@ -85,7 +85,7 @@ const dataTes = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateStatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -100,7 +100,7 @@ const dataTes = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateStatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -115,7 +115,7 @@ const dataTes = {
 						context.dispatch('updateIsLoading', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateStatus', false)
 					context.dispatch('updateIsLoading', false)
 				})
@@ -130,7 +130,7 @@ const dataTes = {
 						context.dispatch('updateIsLoadingToken', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateStatus', false)
 					context.dispatch('updateIsLoadingToken', false)
 				})
@@ -145,7 +145,7 @@ const dataTes = {
 						context.dispatch('updateIsLoadingToken', false)
 					}
 				})
-				.catch(err => {
+				.catch(() => {
 					context.commit('updateStatus', false)
 					context.dispatch('updateIsLoadingToken', false)
 				})

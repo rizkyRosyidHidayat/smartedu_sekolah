@@ -111,7 +111,7 @@
         var vm = this
         var reader = new FileReader()
         reader.readAsArrayBuffer(e);
-        reader.onload = function(e) {
+        reader.onload = function() {
           var data = new Uint8Array(reader.result);
           var wb = XLSX.read(data, { type: "array" });
           wb.SheetNames.map((sheet, index) => {
@@ -143,7 +143,7 @@
                 // window.location.href = '/sekolah/siswa'
               }
             })
-            .catch(err => {
+            .catch(() => {
               this.isLoading = false
               this.status = false
             })

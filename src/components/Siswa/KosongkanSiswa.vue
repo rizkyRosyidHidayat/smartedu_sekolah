@@ -27,7 +27,7 @@
 <script>
   import {
     VDialog, VCard,
-    VCardText, VCardActions,
+    VCardActions,
     VBtn, VDivider,
     VSpacer,
     VIcon
@@ -37,7 +37,7 @@
   export default {
     components: {
       VDialog, VCard,
-      VCardText, VCardActions,
+      VCardActions,
       VBtn, VDivider,
       VSpacer,
       VIcon

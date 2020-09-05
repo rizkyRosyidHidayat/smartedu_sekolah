@@ -1,5 +1,5 @@
 import http from './http'
 
-export function getDataKelas(data) {
+export function getDataKelas() {
 	return http.get('group')
 }

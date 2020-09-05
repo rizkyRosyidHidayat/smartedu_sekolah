@@ -1,21 +1,21 @@
 <template>	
 	<v-row dense>
-		<v-col cols="12" md="6" sm="12">
+		<v-col cols="12" md="12" sm="12">
 			<v-btn
-				depressed block 
+				text block 
 				color="primary">
 				<v-icon class="mr-3">mdi-school</v-icon>
 				Login sekolah
 			</v-btn>
 		</v-col>
-		<v-col cols="12" md="6" sm="12">
+		<!-- <v-col cols="12" md="6" sm="12">
 			<v-btn
 				depressed block outlined
 				color="primary">
 				<v-icon class="mr-3">mdi-face</v-icon>
 				Login siswa
 			</v-btn>
-		</v-col>
+		</v-col> -->
 	</v-row>	
 </template>
 

@@ -16,17 +16,20 @@
 			:search="search"
 			:items="dataResult"
 			:items-per-page="10">
-      <template v-slot:item.no="{item}">
-        {{dataResult.map(x => x.user_nisn).indexOf(item.user_nisn)+1}}
-      </template>
+			<template v-slot:item.no="{item}">
+				{{dataResult.map(x => x.user_nisn).indexOf(item.user_nisn)+1}}
+			</template>
+			<template v-slot:item.exam_score="{item}">
+				{{item.exam_score.toFixed(2)}}
+			</template>
 			<template v-slot:no-data>
-	      <v-alert type="info" class="mt-4">
-	        <div>Data tidak ditemukan</div>
-	      </v-alert>
-	    </template>
+				<v-alert type="info" class="mt-4">
+					<div>Data tidak ditemukan</div>
+				</v-alert>
+			</template>
 		</v-data-table>
 	</div>
-</template>
+	</template>
 
 <script>
 	import { mapState } from 'vuex'

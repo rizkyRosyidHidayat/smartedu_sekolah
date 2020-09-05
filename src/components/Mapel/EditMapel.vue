@@ -17,21 +17,22 @@
         <v-form v-model="valid" ref="form">
           <v-card-text class="pa-6 pb-0">
             <v-select
-              :items="dataJurusan"
-              item-text="name"
-              item-value="id"
-              v-model="data.major.id"
-              label="Jurusan"
-              outlined
-              dense
-              :rules="requiredRule"              
-            ></v-select>
-            <v-select
               :items="dataKelas"
               item-text="name"
               item-value="id"
               v-model="data.group.id"
               label="Kelas"
+              outlined
+              dense
+              :rules="requiredRule"              
+            ></v-select>
+            <v-select
+              :items="detailJurusan"
+              item-text="major.name"
+              item-value="major.id"
+              :disabled="data.group.id === ''?true:false"
+              v-model="data.major.id"
+              label="Jurusan"
               outlined
               dense
               :rules="requiredRule"              
@@ -140,7 +141,23 @@
     },
 
     computed: {
-      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status', 'dataKelas'])
+      ...mapState('dataMaster', ['dataJurusan', 'isLoading', 'status', 'dataKelas', 'dataRuang']),
+      detailKelas: {
+        get() {
+          return this.dataKelas
+        },
+        set(val) {
+          this.dataKelas.filter(kelas => kelas.id === val)
+        }
+      },
+      detailJurusan: {
+        get() {
+          return this.dataRuang.filter(ruang => ruang.group.id === this.data.group.id)
+        },
+        set(val) {
+          this.dataJurusan.filter(jurusan => jurusan.id === val)
+        }
+      },
     },
 
     methods: {
